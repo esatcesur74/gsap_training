@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Navbar() {
     const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
     return (
-        <nav className="fixed top-0 w-full z-50 transition-all duration-300 bg-slate-950/20 backdrop-blur-sm">
+        <nav className="fixed top-0 w-full z-50 transition-all duration-300 ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-14 sm:h-16 md:h-20">
                     <div className="flex items-center space-x-1 group cursor-pointer">

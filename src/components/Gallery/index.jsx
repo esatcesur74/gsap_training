@@ -2,48 +2,11 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll } from "framer-motion";
 import Lenis from "lenis";
 
-import imgA from "../assets/a.jpeg";
-import imgB from "../assets/b.jpeg";
-import imgC from "../assets/c.jpeg";
-import imgD from "../assets/d.jpeg";
-import imgE from "../assets/e.jpeg";
-import vid1 from "../assets/vid1.mp4";
-
-const Section1 = ({ plane1, plane2, plane3, scrollYProgress }) => {
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
-    const rotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
-
-    return (
-        <motion.div style={{ scale, rotate }} className="h-screen overflow-hidden flex items-center justify-center relative">
-            <div ref={plane1} className="absolute inset-0">
-                <img src={imgA} className="absolute w-[25vw] h-auto object-cover" style={{ top: "15%", left: "5%" }} />
-                <img src={imgB} className="absolute w-[22vw] h-auto object-cover" style={{ top: "5%", left: "28%" }} />
-            </div>
-            <div ref={plane2} className="absolute inset-0">
-                <img src={imgC} className="absolute w-[26vw] h-auto object-cover" style={{ top: "10%", left: "49%" }} />
-                <img src={imgD} className="absolute w-[22vw] h-auto object-cover" style={{ top: "18%", left: "75%" }} />
-            </div>
-            <div ref={plane3} className="absolute inset-0">
-                <img src={imgE} className="absolute w-[27vw] h-auto object-cover" style={{ top: "62%", left: "25%" }} />
-                <video src={vid1} className="absolute w-[27vw] h-auto object-cover" style={{ top: "55%", left: "52%" }} autoPlay muted loop playsInline />
-            </div>
-        </motion.div>
-    );
-};
-
-const Section2 = ({ scrollYProgress }) => {
-    const scale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1]);
-    const rotate = useTransform(scrollYProgress, [0, 0.5], [5, 0]);
-
-    return (
-        <motion.div style={{ scale, rotate }} className="relative h-screen">
-            <img src={imgC} className="w-full h-full object-cover" />
-        </motion.div>
-    );
-};
+import ParallaxPlanes from "./ParallaxPlanes";
+import ScaledImage from "./ScaledImage";
 
 export default function Gallery() {
     const plane1 = useRef(null);
@@ -113,9 +76,9 @@ export default function Gallery() {
     return (
         <main ref={container} className="relative h-[200vh]">
             <div className="sticky top-0 h-screen overflow-hidden">
-                <Section1 plane1={plane1} plane2={plane2} plane3={plane3} scrollYProgress={scrollYProgress} />
+                <ParallaxPlanes plane1={plane1} plane2={plane2} plane3={plane3} scrollYProgress={scrollYProgress} />
             </div>
-            <Section2 scrollYProgress={scrollYProgress} />
+            <ScaledImage scrollYProgress={scrollYProgress} />
         </main>
     );
 }

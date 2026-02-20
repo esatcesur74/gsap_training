@@ -228,8 +228,8 @@ export default function LogoDots({ onComplete, loaded }) {
       )}
 
       {ready && !loaded && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/70 text-sm font-light tracking-widest animate-pulse">
-          click to enter
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-sm font-normal tracking-widest animate-pulse">
+          CLICK TO ENTER
         </div>
       )}
     </div>

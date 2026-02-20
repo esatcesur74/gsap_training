@@ -17,7 +17,7 @@ export default function Gallery() {
         let targetY = 0;
         let currentX = 0;
         let currentY = 0;
-        const smoothing = 0.03;
+        const smoothing = 0.001;
 
         const lerp = (start, end, amount) => start * (1 - amount) + end * amount;
         let requestId;

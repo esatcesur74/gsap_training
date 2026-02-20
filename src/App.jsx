@@ -1,12 +1,16 @@
-import React from 'react'
-import Gallery from './components/Gallery';
+import React from "react";
+import Gallery from "./components/Gallery";
+import LogoDots from "./components/LogoDots";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      <Gallery />
-    </div>
-  )
-}
+<div className="relative min-h-screen bg-black overflow-hidden">
+  <LogoDots />
+  <div className="relative z-10">
+    <Gallery />
+  </div>
+</div>
+  );
+};
 
-export default App
+export default App;

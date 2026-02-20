@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Lenis from "lenis";
-
+import BrandScramble from "../BrandScramble";
 import ParallaxPlanes from "./ParallaxPlanes";
 
 export default function Gallery() {
@@ -17,7 +17,7 @@ export default function Gallery() {
         let targetY = 0;
         let currentX = 0;
         let currentY = 0;
-        const smoothing = 0.05;
+        const smoothing = 0.03;
 
         const lerp = (start, end, amount) => start * (1 - amount) + end * amount;
         let requestId;
@@ -71,8 +71,10 @@ export default function Gallery() {
 
 
     return (
-        <main className="h-screen overflow-hidden">
+        <main className="h-screen overflow-hidden relative">
             <ParallaxPlanes plane1={plane1} plane2={plane2} plane3={plane3} />
         </main>
     );
+
+
 }

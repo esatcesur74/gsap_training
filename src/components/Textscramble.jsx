@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
 
 const TextScramble = ({ text, className = "" }) => {
-    const [displayText, setDisplayText] = useState(text);
+    const [displayText, setDisplayText] = useState("*".repeat(text.length));
     const [isScrambling, setIsScrambling] = useState(false);
     const intervalRef = useRef(null);
 
@@ -36,6 +36,22 @@ const TextScramble = ({ text, className = "" }) => {
         }, 30);
     };
 
+    const hide = () => {
+        clearInterval(intervalRef.current);
+        setDisplayText("*".repeat(text.length));
+        setIsScrambling(false);
+
+    };
+
+    useEffect(() => {
+        scramble();
+    }, [text]);
+
+
+
+
+
+
     useEffect(() => {
         return () => clearInterval(intervalRef.current);
     }, []);
@@ -44,10 +60,12 @@ const TextScramble = ({ text, className = "" }) => {
         <span
             className={className}
             onMouseEnter={scramble}
+            onMouseLeave={hide}
         >
             {displayText}
         </span>
     );
+
 };
 
 export default TextScramble;

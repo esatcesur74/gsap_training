@@ -13,7 +13,7 @@ const ParallaxPlanes = ({ plane1, plane2, plane3, }) => {
     return (
         <div className="relative w-screen h-screen overflow-hidden">
 
-
+{/* PARALLAX CONTENT 
             <img
                 src="/ARBC.png"
                 className="absolute left-1/2 top-1/2 
@@ -22,6 +22,7 @@ const ParallaxPlanes = ({ plane1, plane2, plane3, }) => {
              image-rendering-pixelated
              pointer-events-none"
             />
+            */}
 
             {/* PARALLAX CONTENT */}
             <div className="w-[300vw] h-[300vh] relative -top-[100vh] -left-[100vw] z-10">

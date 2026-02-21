@@ -112,11 +112,22 @@ export default function LogoDots({ onComplete, loaded }) {
       // === MOUSE ===
       let mouseX = 0;
       let mouseY = 0;
+      let mouseWorldX = 0;
+      let mouseWorldY = 0;
+      const mouseVec = new THREE.Vector3();
       const onMouseMove = (e) => {
         mouseX = (e.clientX / window.innerWidth) * 2 - 1;
         mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        mouseVec.set(mouseX, mouseY, 0.5);
+        mouseVec.unproject(camera);
+        mouseVec.sub(camera.position).normalize();
+        const distance = -camera.position.z / mouseVec.z;
+        mouseWorldX = camera.position.x + mouseVec.x * distance;
+        mouseWorldY = camera.position.y + mouseVec.y * distance;
       };
+
       window.addEventListener("mousemove", onMouseMove);
+
 
       // === ANİMASYON ===
       const duration = 3.0;
@@ -133,29 +144,50 @@ export default function LogoDots({ onComplete, loaded }) {
 
           setProgress(Math.floor(eased * 100));
 
-          for (let i = 0; i < count; i++) {
+                  for (let i = 0; i < count; i++) {
             const ix = i * 3;
             const iy = i * 3 + 1;
             const iz = i * 3 + 2;
 
-            pos[ix] = startArray[ix] + (targetArray[ix] - startArray[ix]) * eased;
-            pos[iy] = startArray[iy] + (targetArray[iy] - startArray[iy]) * eased;
-            pos[iz] = startArray[iz] + (targetArray[iz] - startArray[iz]) * eased;
+            if (!assembled) {
+              // Still assembling — interpolate from start to target
+              pos[ix] = startArray[ix] + (targetArray[ix] - startArray[ix]) * eased;
+              pos[iy] = startArray[iy] + (targetArray[iy] - startArray[iy]) * eased;
+              pos[iz] = startArray[iz] + (targetArray[iz] - startArray[iz]) * eased;
 
-            if (eased > 0.9) {
-              const drift = (eased - 0.9) * 10;
-              const ox = targetArray[ix];
-              const oy = targetArray[iy];
-              const oz = targetArray[iz];
-              pos[ix] = pos[ix] + (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) * drift;
-              pos[iy] = pos[iy] + (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) * drift;
-              pos[iz] = pos[iz] + (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) * drift;
+              if (eased > 0.9) {
+                const drift = (eased - 0.9) * 10;
+                const ox = targetArray[ix];
+                const oy = targetArray[iy];
+                const oz = targetArray[iz];
+                pos[ix] = pos[ix] + (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) * drift;
+                pos[iy] = pos[iy] + (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) * drift;
+                pos[iz] = pos[iz] + (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) * drift;
+              }
+
+              if (p >= 1 && !assembled) {
+                assembled = true;
+                setReady(true);
+              }
+            } else {
+              // Assembled — magnetic hover only
+              const dx = pos[ix] - mouseWorldX;
+              const dy = pos[iy] - mouseWorldY;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              const hoverRadius = 50;
+
+              if (dist < hoverRadius) {
+                const force = (1 - dist / hoverRadius) * 30;
+                const angle = Math.atan2(dy, dx);
+                pos[ix] += Math.cos(angle) * force;
+                pos[iy] += Math.sin(angle) * force;
+                pos[iz] += (Math.random() - 0.5) * force * 0.3;
+              } else {
+                pos[ix] += (targetArray[ix] - pos[ix]) * 0.08;
+                pos[iy] += (targetArray[iy] - pos[iy]) * 0.08;
+                pos[iz] += (targetArray[iz] - pos[iz]) * 0.08;
+              }
             }
-          }
-
-          if (p >= 1 && !assembled) {
-            assembled = true;
-            setReady(true);
           }
         } else {
           for (let i = 0; i < count; i++) {
@@ -168,11 +200,13 @@ export default function LogoDots({ onComplete, loaded }) {
             pos[iz] += (Math.random() - 0.5) * 2;
           }
 
+
           material.opacity *= 0.98;
           if (material.opacity < 0.01) {
             material.opacity = 0;
           }
         }
+
 
         geometry.attributes.position.needsUpdate = true;
 
@@ -217,9 +251,8 @@ export default function LogoDots({ onComplete, loaded }) {
     <div
       ref={mountRef}
       onClick={handleClick}
-      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${
-        loaded ? "opacity-0 pointer-events-none" : ""
-      }`}
+      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${loaded ? "opacity-0 pointer-events-none" : ""
+        }`}
     >
       {!ready && (
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50 text-sm font-light tracking-widest">

@@ -1,80 +1,80 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import BrandScramble from "../BrandScramble";
-import ParallaxPlanes from "./ParallaxPlanes";
+import GalleryPage from "./GalleryPage";
+import ThemeToggle from "../ThemeToggle";
+import { galleryPages } from "../../data/galleryData";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Gallery() {
-    const plane1 = useRef(null);
-    const plane2 = useRef(null);
-    const plane3 = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const containerRef = useRef(null);
 
-    useEffect(() => {
-        const panRangeX = window.innerWidth * 1;
-        const panRangeY = window.innerHeight * 1;
+  // === MOUSE TRACKING ===
+  useEffect(() => {
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
 
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        const smoothing = 0.001;
+    const handleMouseMove = (e) => {
+      targetX = (e.clientX / window.innerWidth) * 2 - 1;
+      targetY = (e.clientY / window.innerHeight) * 2 - 1;
+    };
 
-        const lerp = (start, end, amount) => start * (1 - amount) + end * amount;
-        let requestId;
+    const lerp = (start, end, amount) => start + (end - start) * amount;
 
-        const animate = () => {
-            currentX = lerp(currentX, targetX, smoothing);
-            currentY = lerp(currentY, targetY, smoothing);
+    const animate = () => {
+      currentX = lerp(currentX, targetX, 0.05);
+      currentY = lerp(currentY, targetY, 0.05);
+      mouseRef.current = { x: currentX, y: currentY };
+      requestAnimationFrame(animate);
+    };
 
-            gsap.set(plane1.current, { x: currentX, y: currentY });
-            gsap.set(plane2.current, { x: currentX * 0.6, y: currentY * 0.6 });
-            gsap.set(plane3.current, { x: currentX * 0.3, y: currentY * 0.3 });
+    window.addEventListener("mousemove", handleMouseMove);
+    requestAnimationFrame(animate);
 
-            requestId = requestAnimationFrame(animate);
-        };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
-        requestId = requestAnimationFrame(animate);
+  // === LENIS SMOOTH SCROLL + SCROLLTRIGGER ===
+  useEffect(() => {
+    const lenis = new Lenis();
 
-        function handleMouseMove(e) {
-            const normalizedX = (e.clientX / window.innerWidth) * 2 - 1;
-            const normalizedY = (e.clientY / window.innerHeight) * 2 - 1;
-            targetX = -normalizedX * panRangeX;
-            targetY = -normalizedY * panRangeY;
-        }
+    lenis.on("scroll", ScrollTrigger.update);
 
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            cancelAnimationFrame(requestId);
-        };
-    }, []);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
 
+    // Scroll snap to each page
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      end: "bottom bottom",
+      snap: {
+        snapTo: 1 / (galleryPages.length - 1),
+        duration: { min: 0.3, max: 0.6 },
+        ease: "power2.inOut",
+      },
+    });
 
+    return () => {
+      lenis.destroy();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+      gsap.ticker.remove(lenis.raf);
+    };
+  }, []);
 
-
-
-
-
-    useEffect(() => {
-        const lenis = new Lenis();
-
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-
-        return () => lenis.destroy();
-    }, []);
-
-
-
-
-    return (
-        <main className="h-screen overflow-hidden relative">
-            <ParallaxPlanes plane1={plane1} plane2={plane2} plane3={plane3} />
-        </main>
-    );
-
-
+  return (
+    <main ref={containerRef}>
+      <ThemeToggle />
+      {galleryPages.map((page) => (
+        <GalleryPage key={page.id} page={page} mouseRef={mouseRef} />
+      ))}
+    </main>
+  );
 }

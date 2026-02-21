@@ -15,15 +15,28 @@ export default function PhotoCard({ src, data, className = "", style }) {
         setShowCoords(false);
       }}
     >
-      <img
-        src={src}
-        alt="photo"
-        className="w-full h-auto object-cover transition-[filter] duration-500"
-        style={{
-         filter: hovered ? "url(#pixelate) brightness(0.7)" : "none",
+      <div className="relative overflow-hidden">
+        <img
+          src={src}
+          alt="photo"
+          className="w-full h-auto object-cover"
+        />
+               {data?.faceRegion && (
+          <img
+            src={src}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              filter: "url(#pixelate) brightness(0.7)",
+              clipPath: `ellipse(${data.faceRegion.rx}% ${data.faceRegion.ry}% at ${data.faceRegion.cx}% ${data.faceRegion.cy}%)`,
+              opacity: hovered ? 1 : 0,
+              transition: "opacity 0.5s ease",
+              pointerEvents: "none",
+            }}
+          />
+        )}
 
-        }}
-      />
+      </div>
 
       {hovered && data && (
         <div

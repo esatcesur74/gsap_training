@@ -26,12 +26,11 @@ import imgAB from "../assets/ab.jpeg";
 import imgAC from "../assets/ac.jpeg";
 import imgAD from "../assets/ad.jpeg";
 
-// === PHOTO METADATA ===
-// Each photo has its source image and info shown on hover
+
 export const photoMeta = {
-  a: { src: imgA, date: "20 may 2025", shotBy: "Akif Akgun", location: "Oppsal / Oslo", coords: null, model: "Ali Azzaro", campaign: "Tugra Caps / 2025" },
+  a: { src: imgA, date: "20 may 2025", shotBy: "Akif Akgun", location: "Oppsal / Oslo", coords: null, model: "Ali Azzaro", campaign: "Tugra Caps / 2025", faceRegion: { cx: 27, cy: 35, rx: 5, ry: 5 } },
   b: { src: imgB, date: "16 january 2026", shotBy: "Life Jumanson", location: "Majorstuen / Oslo", coords: "59.927481, 10.719930", model: "Rayan", campaign: "Comme De Immigres" },
-  c: { src: imgC, date: "18 january 2026", shotBy: "Bashir Mohammed", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Richard", campaign: "Comme des Immigres" },
+  c: { src: imgC, date: "18 january 2026", shotBy: "Bashir Mohammed", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Richard", campaign: "Comme des Immigres",faceRegion: { cx: 46, cy: 24, rx: 7, ry: 16 } },
   d: { src: imgD, date: "8 January 2026", shotBy: "Akif Akgun", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Babou", campaign: "Hooligan Sweaters" },
   e: { src: imgE, date: "06 july 2026", shotBy: "Siar Esat Cesur", location: "Nice / France", coords: null, model: "Melih", campaign: null },
   f: { src: imgF, date: null, shotBy: "Akif Akgun", location: "Amsterdam / Netherlands", coords: null, model: "Esat", campaign: "Eu Tee" },
@@ -67,10 +66,10 @@ export const galleryPages = [
   {
     id: 1,
     photos: [
-      { photoId: "a", position: { top: "5%", left: "8%" }, width: "28vw", depth: 0.9 },
-      { photoId: "b", position: { top: "15%", left: "62%" }, width: "22vw", depth: 0.3 },
-      { photoId: "c", position: { top: "45%", left: "35%" }, width: "26vw", depth: 0.6 },
-      { photoId: "d", position: { top: "65%", left: "5%" }, width: "20vw", depth: 0.2 },
+      { photoId: "a", position: { top: "5%", left: "8%" }, width: "19vw", depth: 0.9 },
+      { photoId: "b", position: { top: "65%", left: "12%" }, width: "22vw", depth: 0.3 },
+      { photoId: "c", position: { top: "45%", left: "35%" }, width: "42vw", depth: 0.6 },
+      { photoId: "d", position: { top: "5%", left: "62%" }, width: "19vw", depth: 0.2 },
       { photoId: "e", position: { top: "55%", left: "72%" }, width: "24vw", depth: 0.7 },
     ],
   },

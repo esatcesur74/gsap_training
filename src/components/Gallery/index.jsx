@@ -1,3 +1,4 @@
+// index.jsx
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -26,32 +27,35 @@ export default function Gallery() {
 
     const lerp = (start, end, amount) => start + (end - start) * amount;
 
+    let rafId = 0;
     const animate = () => {
       currentX = lerp(currentX, targetX, 0.05);
       currentY = lerp(currentY, targetY, 0.05);
       mouseRef.current = { x: currentX, y: currentY };
-      requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(animate);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
 
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   // === LENIS SMOOTH SCROLL + SCROLLTRIGGER ===
   useEffect(() => {
     const lenis = new Lenis();
-
     lenis.on("scroll", ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const onTick = (time) => {
       lenis.raf(time * 1000);
-    });
+    };
+    gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
-    // Scroll snap to each page
-    ScrollTrigger.create({
+    const snapST = ScrollTrigger.create({
       trigger: containerRef.current,
       start: "top top",
       end: "bottom bottom",
@@ -63,17 +67,22 @@ export default function Gallery() {
     });
 
     return () => {
+      snapST.kill();
+      gsap.ticker.remove(onTick);
       lenis.destroy();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      gsap.ticker.remove(lenis.raf);
     };
   }, []);
 
   return (
     <main ref={containerRef}>
       <ThemeToggle />
-      {galleryPages.map((page) => (
-        <GalleryPage key={page.id} page={page} mouseRef={mouseRef} />
+      {galleryPages.map((page, i) => (
+        <GalleryPage
+          key={page.id}
+          page={page}
+          pageIndex={i}
+          mouseRef={mouseRef}
+        />
       ))}
     </main>
   );

@@ -3,8 +3,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import GalleryPage from "./GalleryPage";
-import TextVideoTransition from "./TextVideoTransition";
 import ThemeToggle from "../ThemeToggle";
+import Header from "../Header";
+import ParallaxScrollSection from "./ParallaxScrollSection";
+import HorizontalScrollSection from "./HorizontalScrollSection";
+import MouseImageGallery from "./MouseImageGallery";
 import { galleryPages } from "../../data/galleryData";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +16,6 @@ export default function Gallery() {
   const mouseRef = useRef({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
- 
   useEffect(() => {
     let targetX = 0;
     let targetY = 0;
@@ -44,7 +46,6 @@ export default function Gallery() {
     };
   }, []);
 
-
   useEffect(() => {
     const lenis = new Lenis();
     lenis.on("scroll", ScrollTrigger.update);
@@ -63,26 +64,27 @@ export default function Gallery() {
 
   return (
     <main ref={containerRef}>
+      <Header />
       <ThemeToggle />
 
-      
       <GalleryPage page={galleryPages[0]} pageIndex={0} mouseRef={mouseRef} />
 
-      
-      <TextVideoTransition />
+      <ParallaxScrollSection />
 
-     
-      <GalleryPage page={galleryPages[1]} pageIndex={1} mouseRef={mouseRef} />
+      <div className="relative" style={{ marginTop: "-100vh" }}>
+        <HorizontalScrollSection />
+      </div>
 
-     
-      {galleryPages.slice(2).map((page, i) => (
+      {galleryPages.slice(3, 5).map((page, i) => (
         <GalleryPage
           key={page.id}
           page={page}
-          pageIndex={i + 2}
+          pageIndex={i + 3}
           mouseRef={mouseRef}
         />
       ))}
+
+      <MouseImageGallery />
     </main>
   );
 }

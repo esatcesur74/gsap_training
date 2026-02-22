@@ -71,16 +71,20 @@ export const galleryPages = [
             { photoId: "e", position: { top: "55%", left: "72%" }, width: "24vw", depth: 0.7 },
         ],
     },
-    {
-        id: 2,
-        photos: [
+    
+{
+    id: 2,
+    photos: [
+        { photoId: "g", position: { top: "25%", left: "25%" }, width: "23vw", depth: 0.4 },
+        { photoId: "s", position: { top: "18%", left: "3%" }, width: "22vw", depth: 0.3 },
+        { photoId: "z", position: { top: "25%", left: "75%" }, width: "23vw", depth: 0.4 },
+        { photoId: "aa", position: { top: "18%", left: "50%" }, width: "22vw", depth: 0.9 },
+        { photoId: "b", position: { top: "0%", left: "0%" }, width: "25vw", depth: 0.5 },
+        { photoId: "c", position: { top: "0%", left: "0%" }, width: "25vw", depth: 0.6 },
+    ],
+},
 
-            { photoId: "g", position: { top: "25%", left: "25%" }, width: "23vw", depth: 0.4 },
-            { photoId: "s", position: { top: "18%", left: "3%" }, width: "22vw", depth: 0.3 },
-            { photoId: "z", position: { top: "25%", left: "75%" }, width: "23vw", depth: 0.4 },
-            { photoId: "aa", position: { top: "18%", left: "50%" }, width: "22vw", depth: 0.9 },
-        ],
-    },
+    
     {
         id: 3,
         photos: [

@@ -69,8 +69,11 @@ export default function LogoDots({ onComplete, loaded }) {
       const startArray = new Float32Array(count * 3);
       const colorArray = new Float32Array(count * 3);
 
-      const colorA = new THREE.Color("#ffffff");
-      const colorB = new THREE.Color("#6c757d");
+      const isDark = document.documentElement.classList.contains("dark");
+      const colorA = new THREE.Color(isDark ? "#ffffff" : "#5a141f");
+      const colorB = new THREE.Color(isDark ? "#6c757d" : "#142954");
+
+
       const tempColor = new THREE.Color();
 
       for (let i = 0; i < count; i++) {
@@ -144,7 +147,7 @@ export default function LogoDots({ onComplete, loaded }) {
 
           setProgress(Math.floor(eased * 100));
 
-                  for (let i = 0; i < count; i++) {
+          for (let i = 0; i < count; i++) {
             const ix = i * 3;
             const iy = i * 3 + 1;
             const iz = i * 3 + 2;
@@ -220,7 +223,7 @@ export default function LogoDots({ onComplete, loaded }) {
 
       animate();
 
-     
+
       const onResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();

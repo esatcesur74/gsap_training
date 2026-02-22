@@ -1,9 +1,9 @@
-// index.jsx
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import GalleryPage from "./GalleryPage";
+import TextVideoTransition from "./TextVideoTransition";
 import ThemeToggle from "../ThemeToggle";
 import { galleryPages } from "../../data/galleryData";
 
@@ -13,7 +13,7 @@ export default function Gallery() {
   const mouseRef = useRef({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
-  // === MOUSE TRACKING ===
+ 
   useEffect(() => {
     let targetX = 0;
     let targetY = 0;
@@ -44,7 +44,7 @@ export default function Gallery() {
     };
   }, []);
 
-  // === LENIS SMOOTH SCROLL + SCROLLTRIGGER ===
+
   useEffect(() => {
     const lenis = new Lenis();
     lenis.on("scroll", ScrollTrigger.update);
@@ -55,19 +55,7 @@ export default function Gallery() {
     gsap.ticker.add(onTick);
     gsap.ticker.lagSmoothing(0);
 
-    const snapST = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top top",
-      end: "bottom bottom",
-      snap: {
-        snapTo: 1 / (galleryPages.length - 1),
-        duration: { min: 0.3, max: 0.6 },
-        ease: "power2.inOut",
-      },
-    });
-
     return () => {
-      snapST.kill();
       gsap.ticker.remove(onTick);
       lenis.destroy();
     };
@@ -76,11 +64,22 @@ export default function Gallery() {
   return (
     <main ref={containerRef}>
       <ThemeToggle />
-      {galleryPages.map((page, i) => (
+
+      
+      <GalleryPage page={galleryPages[0]} pageIndex={0} mouseRef={mouseRef} />
+
+      
+      <TextVideoTransition />
+
+     
+      <GalleryPage page={galleryPages[1]} pageIndex={1} mouseRef={mouseRef} />
+
+     
+      {galleryPages.slice(2).map((page, i) => (
         <GalleryPage
           key={page.id}
           page={page}
-          pageIndex={i}
+          pageIndex={i + 2}
           mouseRef={mouseRef}
         />
       ))}

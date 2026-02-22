@@ -31,8 +31,6 @@ export default function DepthPhoto({ photo, mouseRef }) {
   if (!meta) return null;
 
   const scale = 0.85 + photo.depth * 0.2;
-  const opacity = 0.75 + photo.depth * 0.25;
-
   return (
     <div
       ref={elRef}
@@ -41,11 +39,12 @@ export default function DepthPhoto({ photo, mouseRef }) {
         top: photo.position.top,
         left: photo.position.left,
         width: photo.width,
-        opacity: opacity,
+        zIndex: photo.zIndex || 1,
         transform: `scale(${scale})`,
       }}
     >
-      <PhotoCard src={meta.src} data={meta} />
+      <PhotoCard src={meta.src} data={meta} photoId={photo.photoId} />
+
     </div>
   );
 }

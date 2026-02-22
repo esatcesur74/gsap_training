@@ -5,7 +5,6 @@ import imgD from "../assets/d.jpeg";
 import imgE from "../assets/e.jpeg";
 import imgF from "../assets/f.jpeg";
 import imgG from "../assets/g.jpeg";
-import imgH from "../assets/h.jpeg";
 import imgJ from "../assets/j.jpeg";
 import imgK from "../assets/k.jpeg";
 import imgL from "../assets/l.jpeg";
@@ -28,33 +27,32 @@ import imgAD from "../assets/ad.jpeg";
 
 
 export const photoMeta = {
-  a: { src: imgA, date: "20 may 2025", shotBy: "Akif Akgun", location: "Oppsal / Oslo", coords: null, model: "Ali Azzaro", campaign: "Tugra Caps / 2025", faceRegion: { cx: 27, cy: 35, rx: 5, ry: 5 } },
-  b: { src: imgB, date: "16 january 2026", shotBy: "Life Jumanson", location: "Majorstuen / Oslo", coords: "59.927481, 10.719930", model: "Rayan", campaign: "Comme De Immigres" },
-  c: { src: imgC, date: "18 january 2026", shotBy: "Bashir Mohammed", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Richard", campaign: "Comme des Immigres",faceRegion: { cx: 46, cy: 24, rx: 7, ry: 16 } },
-  d: { src: imgD, date: "8 January 2026", shotBy: "Akif Akgun", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Babou", campaign: "Hooligan Sweaters" },
-  e: { src: imgE, date: "06 july 2026", shotBy: "Siar Esat Cesur", location: "Nice / France", coords: null, model: "Melih", campaign: null },
-  f: { src: imgF, date: null, shotBy: "Akif Akgun", location: "Amsterdam / Netherlands", coords: null, model: "Esat", campaign: "Eu Tee" },
-  g: { src: imgG, date: null, shotBy: "Ali Ezzawi", location: "Grønland / Oslo", coords: null, model: "Ekip", campaign: "Ekip Eu Tee" },
-  h: { src: imgH, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  j: { src: imgJ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  k: { src: imgK, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  l: { src: imgL, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  m: { src: imgM, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  o: { src: imgO, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  p: { src: imgP, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  q: { src: imgQ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  r: { src: imgR, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  s: { src: imgS, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  t: { src: imgT, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  u: { src: imgU, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  v: { src: imgV, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  x: { src: imgX, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  z: { src: imgZ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  oe: { src: imgOE, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  aa: { src: imgAA, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  ab: { src: imgAB, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  ac: { src: imgAC, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
-  ad: { src: imgAD, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    a: { src: imgA, date: "20 may 2025", shotBy: "Akif Akgun", location: "Oppsal / Oslo", coords: null, model: "Ali Azzaro", campaign: "Tugra Caps / 2025", faceRegion: { cx: 27, cy: 35, rx: 5, ry: 5 } },
+    b: { src: imgB, date: "16 january 2026", shotBy: "Life Jumanson", location: "Majorstuen / Oslo", coords: "59.927481, 10.719930", model: "Rayan", campaign: "Comme De Immigres", faceRegion: { cx: 41, cy: 40, rx: 3, ry: 5 } },
+    c: { src: imgC, date: "18 january 2026", shotBy: "Bashir Mohammed", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Richard", campaign: "Comme des Immigres", faceRegion: { cx: 46, cy: 24, rx: 7, ry: 16 } },
+    d: { src: imgD, date: "8 January 2026", shotBy: "Akif Akgun", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Babou", campaign: "Hooligan Sweaters", faceRegion: { cx: 55, cy: 39, rx: 13, ry: 10 } },
+    e: { src: imgE, date: "06 july 2026", shotBy: "Siar Esat Cesur", location: "Nice / France", coords: null, model: "Melih", campaign: null, faceRegion: { cx: 30, cy: 57, rx: 3, ry: 5 } },
+    f: { src: imgF, date: "?", shotBy: "Akif Akgun", location: "Amsterdam / Netherlands", coords: null, model: "Esat", campaign: "Eu Tee" },
+    g: { src: imgG, date: "?????", shotBy: "Ali Ezzawi", location: "Grønland / Oslo", coords: null, model: "Ekip", campaign: "Ekip Eu Tee", faceRegion: { cx: 39, cy: 30, rx: 4, ry: 3 }, },
+    j: { src: imgJ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    k: { src: imgK, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    l: { src: imgL, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    m: { src: imgM, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    o: { src: imgO, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    p: { src: imgP, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    q: { src: imgQ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    r: { src: imgR, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    s: { src: imgS, date: "?????", shotBy: "Akif Akgun", location: "Sagene / Oslo", coords: null, model: "Siar Esat Cesur", campaign: "Tugra Caps", faceRegion: { cx: 48, cy: 27, rx: 3, ry: 2 } },
+    t: { src: imgT, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    u: { src: imgU, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    v: { src: imgV, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    x: { src: imgX, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    z: { src: imgZ, date: "16 january 2026", shotBy: "Life Jumanson", location: "Oslo", coords: null, model: "Sara Kahsai", campaign: "Comme des Immigres", faceRegion: { cx: 43, cy: 54, rx: 3, ry: 3 } },
+    oe: { src: imgOE, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    aa: { src: imgAA, date: "24 january 2026", shotBy: "Siar Esat Cesur", location: "Bjørvika / Oslo", coords: "59.907938, 10.761582", model: "Bashir Mohammed", campaign: "Ekip Pop-Up", faceRegion: { cx: 63, cy: 57, rx: 8, ry: 4, angle: -12 } },
+    ab: { src: imgAB, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    ac: { src: imgAC, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    ad: { src: imgAD, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
 };
 
 // === GALLERY PAGES ===
@@ -63,61 +61,66 @@ export const photoMeta = {
 // width: how wide the photo is
 // depth: 0 = far away (subtle movement), 1 = close (strong movement)
 export const galleryPages = [
-  {
-    id: 1,
-    photos: [
-      { photoId: "a", position: { top: "5%", left: "8%" }, width: "19vw", depth: 0.9 },
-      { photoId: "b", position: { top: "65%", left: "12%" }, width: "22vw", depth: 0.3 },
-      { photoId: "c", position: { top: "45%", left: "35%" }, width: "42vw", depth: 0.6 },
-      { photoId: "d", position: { top: "5%", left: "62%" }, width: "19vw", depth: 0.2 },
-      { photoId: "e", position: { top: "55%", left: "72%" }, width: "24vw", depth: 0.7 },
-    ],
-  },
-  {
-    id: 2,
-    photos: [
-      { photoId: "f", position: { top: "8%", left: "55%" }, width: "25vw", depth: 0.8 },
-      { photoId: "g", position: { top: "20%", left: "5%" }, width: "23vw", depth: 0.4 },
-      { photoId: "h", position: { top: "42%", left: "40%" }, width: "27vw", depth: 0.7 },
-      { photoId: "j", position: { top: "68%", left: "15%" }, width: "21vw", depth: 0.2 },
-      { photoId: "k", position: { top: "52%", left: "72%" }, width: "22vw", depth: 0.5 },
-    ],
-  },
-  {
-    id: 3,
-    photos: [
-      { photoId: "l", position: { top: "10%", left: "12%" }, width: "24vw", depth: 0.6 },
-      { photoId: "m", position: { top: "5%", left: "65%" }, width: "26vw", depth: 0.9 },
-      { photoId: "o", position: { top: "48%", left: "30%" }, width: "22vw", depth: 0.3 },
-      { photoId: "p", position: { top: "60%", left: "68%" }, width: "20vw", depth: 0.8 },
-      { photoId: "q", position: { top: "70%", left: "8%" }, width: "25vw", depth: 0.4 },
-    ],
-  },
-  {
-    id: 4,
-    photos: [
-      { photoId: "r", position: { top: "8%", left: "45%" }, width: "27vw", depth: 0.7 },
-      { photoId: "s", position: { top: "18%", left: "3%" }, width: "22vw", depth: 0.3 },
-      { photoId: "t", position: { top: "45%", left: "60%" }, width: "24vw", depth: 0.9 },
-      { photoId: "u", position: { top: "55%", left: "10%" }, width: "26vw", depth: 0.5 },
-      { photoId: "v", position: { top: "72%", left: "50%" }, width: "21vw", depth: 0.2 },
-    ],
-  },
-  {
-    id: 5,
-    photos: [
-      { photoId: "x", position: { top: "5%", left: "10%" }, width: "25vw", depth: 0.8 },
-      { photoId: "z", position: { top: "12%", left: "60%" }, width: "23vw", depth: 0.4 },
-      { photoId: "oe", position: { top: "40%", left: "35%" }, width: "28vw", depth: 0.6 },
-      { photoId: "aa", position: { top: "62%", left: "65%" }, width: "22vw", depth: 0.9 },
-      { photoId: "ab", position: { top: "68%", left: "5%" }, width: "24vw", depth: 0.3 },
-    ],
-  },
-  {
-    id: 6,
-    photos: [
-      { photoId: "ac", position: { top: "8%", left: "50%" }, width: "26vw", depth: 0.7 },
-      { photoId: "ad", position: { top: "20%", left: "5%" }, width: "24vw", depth: 0.5 },
-    ],
-  },
+    {
+        id: 1,
+        photos: [
+            { photoId: "a", position: { top: "15%", left: "8%" }, width: "19vw", depth: 0.9, zIndex:1 },
+            { photoId: "b", position: { top: "65%", left: "12%" }, width: "22vw", depth: 0.3 },
+            { photoId: "c", position: { top: "45%", left: "35%" }, width: "42vw", depth: 0.6 },
+            { photoId: "d", position: { top: "5%", left: "62%" }, width: "19vw", depth: 0.2 },
+            { photoId: "e", position: { top: "55%", left: "72%" }, width: "24vw", depth: 0.7 },
+        ],
+    },
+    {
+        id: 2,
+        photos: [
+
+            { photoId: "g", position: { top: "25%", left: "25%" }, width: "23vw", depth: 0.4 },
+            { photoId: "s", position: { top: "18%", left: "3%" }, width: "22vw", depth: 0.3 },
+            { photoId: "z", position: { top: "25%", left: "75%" }, width: "23vw", depth: 0.4 },
+            { photoId: "aa", position: { top: "18%", left: "50%" }, width: "22vw", depth: 0.9 },
+        ],
+    },
+    {
+        id: 3,
+        photos: [
+
+        ],
+    },
+    {
+        id: 4,
+        photos: [
+
+        ],
+    },
+    {
+        id: 5,
+        photos: [
+
+        ],
+    },
+    {
+        id: 6,
+        photos: [
+            { photoId: "ac", position: { top: "8%", left: "50%" }, width: "26vw", depth: 0.7 },
+            { photoId: "ad", position: { top: "20%", left: "5%" }, width: "24vw", depth: 0.5 },
+            { photoId: "f", position: { top: "8%", left: "55%" }, width: "25vw", depth: 0.8 },
+            { photoId: "x", position: { top: "5%", left: "10%" }, width: "25vw", depth: 0.8 },
+            { photoId: "k", position: { top: "52%", left: "72%" }, width: "22vw", depth: 0.5 },
+            { photoId: "oe", position: { top: "40%", left: "35%" }, width: "28vw", depth: 0.6 },
+            { photoId: "aa", position: { top: "62%", left: "65%" }, width: "22vw", depth: 0.9 },
+            { photoId: "ab", position: { top: "68%", left: "5%" }, width: "24vw", depth: 0.3 },
+            { photoId: "r", position: { top: "8%", left: "45%" }, width: "27vw", depth: 0.7 },
+
+            { photoId: "t", position: { top: "45%", left: "60%" }, width: "24vw", depth: 0.9 },
+            { photoId: "u", position: { top: "55%", left: "10%" }, width: "26vw", depth: 0.5 },
+            { photoId: "v", position: { top: "72%", left: "50%" }, width: "21vw", depth: 0.2 },
+            { photoId: "l", position: { top: "10%", left: "12%" }, width: "24vw", depth: 0.6 },
+            { photoId: "m", position: { top: "5%", left: "65%" }, width: "26vw", depth: 0.9 },
+            { photoId: "o", position: { top: "48%", left: "30%" }, width: "22vw", depth: 0.3 },
+            { photoId: "p", position: { top: "60%", left: "68%" }, width: "20vw", depth: 0.8 },
+            { photoId: "q", position: { top: "70%", left: "8%" }, width: "25vw", depth: 0.4 },
+
+        ],
+    },
 ];

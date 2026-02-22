@@ -220,7 +220,7 @@ export default function LogoDots({ onComplete, loaded }) {
 
       animate();
 
-      // === RESIZE ===
+     
       const onResize = () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();

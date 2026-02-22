@@ -26,10 +26,48 @@
 
 body {
     width: 100dvw;
-    overflow-x: hidden;
+    overflow: hidden;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: "Inter Variable", sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.infinite-row-clip {
+  overflow: hidden;
+  width: 100%;
+}
+
+.infinite-row-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+  animation: row-right var(--dur, 18s) linear infinite;
+}
+
+.infinite-row-track.left {
+  animation-name: row-left;
+}
+
+/* YOUR STYLE (unchanged) */
+.infinite-text-row {
+  display: flex;
+  white-space: nowrap;
+  font-size: 230px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+/* seamless loop: 2 identical blocks, move by half */
+@keyframes row-right {
+  from { transform: translate3d(-50%,0,0); }
+  to   { transform: translate3d(0,0,0); }
+}
+@keyframes row-left {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-50%,0,0); }
+}

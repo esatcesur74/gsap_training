@@ -58,13 +58,13 @@ const TextScramble = ({ text = "", className = "" }) => {
   };
 
   useEffect(() => {
-    // text değişince reset + otomatik scramble
+    
     setDisplayText("*".repeat(safeText.length));
     setIsScrambling(false);
     if (safeText.length) scramble();
 
     return () => clear();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [safeText]);
 
   return (

@@ -1,126 +1,108 @@
-import { motion, useAnimate } from "framer-motion";
-import { useRef } from "react";
-import { slideLeft, rotateX, opacity, mountAnim } from "./anim";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { blur, translate, opacity } from "./anim";
+import ad from "../../assets/ad.jpeg";
 
 const links = [
-  { title: "Home", href: "#" },
-  { title: "Gallery", href: "#gallery" },
-  { title: "About", href: "#about" },
-  { title: "Contact", href: "#contact" },
+
+  { title: "Gallery", href: "#gallery", src: ad },
+  { title: "Shop", href: "#about", src: "/images/nav-about.jpg" },
+  { title: "Lookbook", href: "#lookbook", src: "/images/nav-lookbook.jpg" },
+  { title: "Contact", href: "#contact", src: "/images/nav-contact.jpg" },
 ];
 
-function NavLink({ data, index, closeMenu }) {
-  const [scope, animate] = useAnimate();
-  const outer = useRef(null);
-  const inner = useRef(null);
 
-  const animateIn = async (e) => {
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const direction = e.clientY < bounds.top + bounds.height / 2 ? -1 : 1;
-
-    await animate(outer.current, { top: `${direction * 100}%` }, { duration: 0 });
-    await animate(inner.current, { top: `${-1 * direction * 100}%` }, { duration: 0 });
-    animate([outer.current, inner.current], { top: "0%" }, { duration: 0.3 });
-  };
-
-  const animateOut = (e) => {
-    const bounds = e.currentTarget.getBoundingClientRect();
-    const direction = e.clientY < bounds.top + bounds.height / 2 ? -1 : 1;
-
-    animate(outer.current, { top: `${direction * 100}%` }, { duration: 0.3 });
-    animate(inner.current, { top: `${-1 * direction * 100}%` }, { duration: 0.3 });
-  };
-
+function NavLink({ data, index, setSelectedLink, selectedLink }) {
   return (
-    <motion.div
-      variants={rotateX}
-      {...mountAnim}
-      custom={index}
-      ref={scope}
-      onMouseEnter={animateIn}
-      onMouseLeave={animateOut}
-      className="relative overflow-hidden border-t"
+    <motion.p
+      onMouseOver={() => setSelectedLink({ isActive: true, index })}
+      onMouseLeave={() => setSelectedLink({ isActive: false, index })}
+      variants={blur}
+      animate={
+        selectedLink.isActive && selectedLink.index !== index ? "open" : "closed"
+      }
       style={{
-        borderColor: "rgba(255,255,255,0.15)",
-        perspective: "120px",
-        transformOrigin: "bottom",
+        margin: 0,
+        display: "flex",
+        overflow: "hidden",
+        fontSize: "5vw",
+        paddingRight: "2vw",
+        paddingTop: "10px",
+        fontWeight: 300,
       }}
     >
-      <a
+      <motion.a
         href={data.href}
-        onClick={closeMenu}
-        className="block text-[5vw] max-md:text-[10vw] uppercase font-light tracking-wider py-[1.5vh] px-[4vw]"
-        style={{ color: "var(--color-bg)" }}
+        variants={translate}
+        custom={[index * 0.05, (links.length - index) * 0.05]}
+        initial="initial"
+        animate="enter"
+        exit="exit"
+        style={{
+          color: "var(--color-text)",
+          textDecoration: "none",
+          textTransform: "uppercase",
+        }}
       >
         {data.title}
-      </a>
-
-      {/* Direction-aware hover fill */}
-      <div
-        ref={outer}
-        className="absolute inset-0 pointer-events-none"
-        style={{ top: "100%", backgroundColor: "var(--color-accent)" }}
-      >
-        <div
-          ref={inner}
-          className="absolute inset-0 flex items-center"
-          style={{ top: "-100%" }}
-        >
-          <span
-            className="block text-[5vw] max-md:text-[10vw] uppercase font-light tracking-wider py-[1.5vh] px-[4vw]"
-            style={{ color: "var(--color-text)" }}
-          >
-            {data.title}
-          </span>
-        </div>
-      </div>
-    </motion.div>
+      </motion.a>
+    </motion.p>
   );
 }
 
 export default function Nav({ closeMenu }) {
+  const [selectedLink, setSelectedLink] = useState({
+    isActive: false,
+    index: 0,
+  });
+
   return (
     <div
-      className="fixed inset-0 z-[70] flex flex-col justify-between"
-      style={{ backgroundColor: "var(--color-text)" }}
+      style={{ backgroundColor: "var(--color-bg)" }}
+      className="w-full px-8 pb-12"
     >
-      {/* Close button */}
-      <div className="flex justify-end p-8">
-        <motion.svg
-          variants={slideLeft}
-          {...mountAnim}
-          onClick={closeMenu}
-          className="cursor-pointer"
-          width="48"
-          height="48"
-          viewBox="0 0 68 68"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M1.5 1.5L67 67" style={{ stroke: "var(--color-bg)" }} />
-          <path d="M66.5 1L1 66.5" style={{ stroke: "var(--color-bg)" }} />
-        </motion.svg>
+      <div className="flex justify-between items-start">
+       
+        <div className="flex flex-wrap max-w-[60%] mt-10">
+          {links.map((link, i) => (
+            <NavLink
+              key={i}
+              data={link}
+              index={i}
+              setSelectedLink={setSelectedLink}
+              selectedLink={selectedLink}
+            />
+          ))}
+        </div>
+
+        
+        <div className="relative w-[400px] h-[300px] mt-10 overflow-hidden">
+          <img
+            src={links[selectedLink.index].src}
+            alt=""
+            className="w-full h-full object-cover transition-all duration-300"
+            style={{
+              opacity: selectedLink.isActive ? 1 : 0,
+              transform: selectedLink.isActive ? "scale(1)" : "scale(0.95)",
+            }}
+          />
+        </div>
       </div>
 
-      {/* Links */}
-      <div className="flex-1 flex flex-col justify-center px-[8vw]">
-        {links.map((link, i) => (
-          <NavLink key={i} data={link} index={i} closeMenu={closeMenu} />
-        ))}
-      </div>
-
-      {/* Footer */}
+      
       <motion.div
         variants={opacity}
-        {...mountAnim}
-        custom={0.5}
-        className="flex gap-8 p-8 text-sm uppercase tracking-widest"
-        style={{ color: "var(--color-bg)", opacity: 0.6 }}
+        initial="initial"
+        animate="open"
+        exit="closed"
+        className="flex gap-8 mt-12 text-xs uppercase tracking-widest"
+        style={{ color: "var(--color-text-muted)" }}
       >
-        <a href="#" className="hover:opacity-100 transition-opacity">Instagram</a>
-        <a href="#" className="hover:opacity-100 transition-opacity">Twitter</a>
-        <a href="#" className="hover:opacity-100 transition-opacity">Behance</a>
+        <a href="#">Instagram</a>
+        <a href="#">Twitter</a>
+        <a href="#">Behance</a>
       </motion.div>
     </div>
   );
 }
+

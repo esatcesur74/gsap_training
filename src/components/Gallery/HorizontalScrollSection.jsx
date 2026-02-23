@@ -61,8 +61,10 @@ export default function HorizontalScrollSection() {
               key={i}
               src="/logo2.svg"
               alt="Logo"
-              className="w-[40vw] h-auto brightness-0 dark:brightness-100"
+              className="w-[40vw] h-auto"
+              style={{ filter: "var(--logo-filter)" }}
             />
+
           ))}
         </div>
 

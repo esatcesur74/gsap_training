@@ -1,57 +1,65 @@
-export const mountAnim = {
-  initial: "initial",
-  animate: "enter",
-  exit: "exit",
-};
 
-// Stairs — staggered height reveal from bottom
 export const height = {
-  initial: { height: 0 },
-  enter: (i) => ({
-    height: "100%",
-    transition: { duration: 0.5, delay: 0.05 * i, ease: [0.33, 1, 0.68, 1] },
-  }),
-  exit: (i) => ({
+  initial: {
     height: 0,
-    transition: { duration: 0.3, delay: 0.05 * i, ease: [0.33, 1, 0.68, 1] },
-  }),
+  },
+  enter: {
+    height: "auto",
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+  },
+  exit: {
+    height: 0,
+    transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1] },
+  },
 };
 
-// Background overlay behind stairs
-export const background = {
-  initial: { opacity: 0 },
-  enter: { opacity: 0.5, transition: { duration: 0.8 } },
-  exit: { opacity: 0, transition: { duration: 0.3 } },
-};
 
-// Generic opacity fade
-export const opacity = {
-  initial: { opacity: 0 },
-  enter: (delay = 0) => ({
+export const blur = {
+  initial: {
+    filter: "blur(0px)",
     opacity: 1,
-    transition: { duration: 0.5, delay },
-  }),
-  exit: { opacity: 0, transition: { duration: 0.3 } },
+  },
+  open: {
+    filter: "blur(4px)",
+    opacity: 0.6,
+    transition: { duration: 0.3 },
+  },
+  closed: {
+    filter: "blur(0px)",
+    opacity: 1,
+    transition: { duration: 0.3 },
+  },
 };
 
-// Close button slides in from right
-export const slideLeft = {
-  initial: { x: 80, opacity: 0 },
-  enter: { x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } },
-  exit: { x: 80, opacity: 0, transition: { duration: 0.3 } },
-};
 
-// Menu links rotate in on X axis
-export const rotateX = {
-  initial: { rotateX: 90, opacity: 0 },
+export const translate = {
+  initial: {
+    y: "100%",
+    opacity: 0,
+  },
   enter: (i) => ({
-    rotateX: 0,
+    y: 0,
     opacity: 1,
-    transition: { duration: 0.5, delay: 0.3 + i * 0.1, ease: [0.33, 1, 0.68, 1] },
+    transition: { duration: 1, ease: [0.76, 0, 0.24, 1], delay: i[0] },
   }),
   exit: (i) => ({
-    rotateX: 90,
+    y: "100%",
     opacity: 0,
-    transition: { duration: 0.3, delay: i * 0.05 },
+    transition: { duration: 0.7, ease: [0.76, 0, 0.24, 1], delay: i[1] },
   }),
+};
+
+
+export const opacity = {
+  initial: {
+    opacity: 0,
+  },
+  open: {
+    opacity: 1,
+    transition: { duration: 0.35 },
+  },
+  closed: {
+    opacity: 0,
+    transition: { duration: 0.35 },
+  },
 };

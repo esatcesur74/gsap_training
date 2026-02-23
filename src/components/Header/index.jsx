@@ -1,47 +1,79 @@
 import { useState } from "react";
-import { AnimatePresence } from "framer-motion";
-import Stairs from "./Stairs";
+import { AnimatePresence, motion } from "framer-motion";
 import Nav from "./Nav";
+import ThemeToggle from "../ThemeToggle";
+import { height } from "./anim";
 
 export default function Header() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   return (
-    <>
-      {/* Burger button */}
-      {!menuIsOpen && (
+    <header
+      className="fixed top-0 left-0 w-full z-50"
+      style={{ backgroundColor: menuIsOpen ? "var(--color-bg)" : "transparent" }}
+    >
+
+      <div
+        className="flex items-center justify-between px-8 py-5"
+      >
+
+        <img
+          src="/ARBC.svg"
+          alt="Logo"
+          className="h-6"
+          style={{ filter: "var(--logo-filter)" }}
+        />
+
+
+
         <div
-          onClick={() => setMenuIsOpen(true)}
-          className="fixed top-6 left-6 z-50 flex items-center gap-3 cursor-pointer group mix-blend-difference"
+          onClick={() => setMenuIsOpen(!menuIsOpen)}
+          className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 cursor-pointer"
         >
-          <div className="flex flex-col gap-1.5">
-            <div
-              className="w-10 h-[1px] transition-all duration-300 group-hover:w-6"
-              style={{ backgroundColor: "#fff" }}
+          <div
+            className="relative w-[22px] h-[10px]"
+          >
+            <span
+              className="absolute left-0 w-full h-[1px] transition-all duration-700"
+              style={{
+                backgroundColor: "var(--color-text)",
+                top: menuIsOpen ? "50%" : "0%",
+                transform: menuIsOpen ? "rotate(45deg)" : "rotate(0deg)",
+                transitionTimingFunction: "cubic-bezier(0.76, 0, 0.24, 1)",
+              }}
             />
-            <div
-              className="w-6 h-[1px] transition-all duration-300 group-hover:w-10"
-              style={{ backgroundColor: "#fff" }}
+            <span
+              className="absolute left-0 w-full h-[1px] transition-all duration-700"
+              style={{
+                backgroundColor: "var(--color-text)",
+                bottom: menuIsOpen ? "50%" : "0%",
+                transform: menuIsOpen ? "rotate(-45deg)" : "rotate(0deg)",
+                transitionTimingFunction: "cubic-bezier(0.76, 0, 0.24, 1)",
+              }}
             />
           </div>
           <span
-            className="text-xs tracking-[0.2em] uppercase max-md:hidden"
-            style={{ color: "#fff" }}
+            className="text-xs tracking-[0.2em] uppercase"
+            style={{ color:"var(--color-text)"}}
           >
-            Menu
+            {menuIsOpen ? "Close" : "Menu"}
           </span>
         </div>
-      )}
 
-      {/* Stairs + Nav */}
-      <AnimatePresence mode="wait">
-        {menuIsOpen && (
-          <>
-            <Stairs />
-            <Nav closeMenu={() => setMenuIsOpen(false)} />
-          </>
-        )}
-      </AnimatePresence>
-    </>
+
+        <ThemeToggle />
+      </div>
+
+      <motion.div
+        variants={height}
+        initial="initial"
+        animate={menuIsOpen ? "enter" : "exit"}
+        className="overflow-hidden"
+      >
+        <AnimatePresence>
+          {menuIsOpen && <Nav closeMenu={() => setMenuIsOpen(false)} />}
+        </AnimatePresence>
+      </motion.div>
+    </header>
   );
 }

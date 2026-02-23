@@ -3,9 +3,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import GalleryPage from "./GalleryPage";
-import ThemeToggle from "../ThemeToggle";
+
 import Header from "../Header";
-import ParallaxScrollSection from "./ParallaxScrollSection";
+
 import HorizontalScrollSection from "./HorizontalScrollSection";
 import MouseImageGallery from "./MouseImageGallery";
 import { galleryPages } from "../../data/galleryData";
@@ -65,24 +65,13 @@ export default function Gallery() {
   return (
     <main ref={containerRef}>
       <Header />
-      <ThemeToggle />
+      
 
       <GalleryPage page={galleryPages[0]} pageIndex={0} mouseRef={mouseRef} />
-
-      <ParallaxScrollSection />
 
       <div className="relative" style={{ marginTop: "-100vh" }}>
         <HorizontalScrollSection />
       </div>
-
-      {galleryPages.slice(3, 5).map((page, i) => (
-        <GalleryPage
-          key={page.id}
-          page={page}
-          pageIndex={i + 3}
-          mouseRef={mouseRef}
-        />
-      ))}
 
       <MouseImageGallery />
     </main>

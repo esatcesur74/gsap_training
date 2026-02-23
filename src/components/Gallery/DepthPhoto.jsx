@@ -28,9 +28,29 @@ export default function DepthPhoto({ photo, mouseRef }) {
   }, [photo.depth, mouseRef]);
 
   const meta = photoMeta[photo.photoId];
-  if (!meta) return null;
+
+  console.log("----");
+  console.log("PHOTO ID:", photo.photoId);
+  console.log("META:", meta);
+
+  if (!meta) {
+    console.log("❌ NO META FOUND");
+    return null;
+  }
+
+  const src =
+    typeof meta.src === "string"
+      ? meta.src
+      : meta.src?.default ?? meta.src;
+
+  console.log("SRC:", src);
+
+  const isVideo = photo.photoId === "vid1" || /\.mp4(\?|#|$)/i.test(String(src));
+
+  console.log("IS VIDEO:", isVideo);
 
   const scale = 0.85 + photo.depth * 0.2;
+
   return (
     <div
       ref={elRef}
@@ -43,8 +63,32 @@ export default function DepthPhoto({ photo, mouseRef }) {
         transform: `scale(${scale})`,
       }}
     >
-      <PhotoCard src={meta.src} data={meta} photoId={photo.photoId} />
-
+      {isVideo ? (
+        <>
+          {console.log("🎬 RENDERING VIDEO")}
+          <video
+            src={src}
+            autoPlay
+            muted
+            loop
+            playsInline
+            controls
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              background: "red", // görünmezse bile alanı gör
+            }}
+            onError={(e) => console.log("VIDEO ERROR:", e)}
+            onLoadedData={() => console.log("VIDEO LOADED")}
+          />
+        </>
+      ) : (
+        <>
+          {console.log("🖼 RENDERING IMAGE")}
+          <PhotoCard src={src} data={meta} photoId={photo.photoId} />
+        </>
+      )}
     </div>
   );
 }

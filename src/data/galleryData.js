@@ -24,6 +24,7 @@ import imgAA from "../assets/aa.jpeg";
 import imgAB from "../assets/ab.jpeg";
 import imgAC from "../assets/ac.jpeg";
 import imgAD from "../assets/ad.jpeg";
+import vid1 from "../assets/vid1.mp4"
 
 
 export const photoMeta = {
@@ -33,7 +34,7 @@ export const photoMeta = {
     d: { src: imgD, date: "8 January 2026", shotBy: "Akif Akgun", location: "Tøyen / Oslo", coords: "59.918239, 10.773224", model: "Babou", campaign: "Hooligan Sweaters", faceRegion: { cx: 55, cy: 39, rx: 13, ry: 10 } },
     e: { src: imgE, date: "06 july 2026", shotBy: "Siar Esat Cesur", location: "Nice / France", coords: null, model: "Melih", campaign: null, faceRegion: { cx: 30, cy: 57, rx: 3, ry: 5 } },
     f: { src: imgF, date: "?", shotBy: "Akif Akgun", location: "Amsterdam / Netherlands", coords: null, model: "Esat", campaign: "Eu Tee" },
-    g: { src: imgG, date: "?????", shotBy: "Ali Ezzawi", location: "Grønland / Oslo", coords: null, model: "Ekip", campaign: "Ekip Eu Tee", faceRegion: { cx: 39, cy: 30, rx: 4, ry: 3 }, },
+    g: { src: imgG, date: "?????", shotBy: "Ali Ezzawi", location: "Grønland / Oslo", coords: null, model: "Ekip", campaign: "Ekip Eu Tee", faceRegions:[{ cx: 39, cy: 30, rx: 4, ry: 3 }, { cx: 50, cy: 70, rx: 4, ry: 6},{ cx: 69, cy: 32, rx: 4, ry: 5 }]   },
     j: { src: imgJ, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     k: { src: imgK, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     l: { src: imgL, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
@@ -53,22 +54,19 @@ export const photoMeta = {
     ab: { src: imgAB, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     ac: { src: imgAC, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     ad: { src: imgAD, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    vid1: { src: vid1, date: null, shotBy: null, location: null, coords: null, model: null, campaign: "Lookbook Video" },
+
+
 };
 
-// === GALLERY PAGES ===
-// Each page is one full-screen section
-// position: where the photo sits (% of the viewport)
-// width: how wide the photo is
-// depth: 0 = far away (subtle movement), 1 = close (strong movement)
 export const galleryPages = [
     {
         id: 1,
         photos: [
-            { photoId: "a", position: { top: "15%", left: "8%" }, width: "19vw", depth: 0.9, zIndex:1 },
-            { photoId: "b", position: { top: "65%", left: "12%" }, width: "22vw", depth: 0.3 },
-            { photoId: "c", position: { top: "45%", left: "35%" }, width: "42vw", depth: 0.6 },
-            { photoId: "d", position: { top: "5%", left: "62%" }, width: "19vw", depth: 0.2 },
-            { photoId: "e", position: { top: "55%", left: "72%" }, width: "24vw", depth: 0.7 },
+            { photoId: "a", position: { top: "12%", left: "8%" }, width: "19vw", depth: 0.9, zIndex:1 },
+            { photoId: "b", position: { top: "30%", left: "30%" }, width: "22vw", depth: 0.3,  },
+            { photoId: "d", position: { top: "45%", left: "62%" }, width: "19vw", depth: 0.2, zIndex:100 },
+            { photoId: "e", position: { top: "5%", left: "72%" }, width: "24vw", depth: 0.7 },
         ],
     },
     
@@ -80,7 +78,8 @@ export const galleryPages = [
         { photoId: "z", position: { top: "25%", left: "75%" }, width: "23vw", depth: 0.4 },
         { photoId: "aa", position: { top: "18%", left: "50%" }, width: "22vw", depth: 0.9 },
         { photoId: "b", position: { top: "0%", left: "0%" }, width: "25vw", depth: 0.5 },
-        { photoId: "c", position: { top: "0%", left: "0%" }, width: "25vw", depth: 0.6 },
+        { photoId: "vid1", position: { top: "0%", left: "0%" }, width: "40vw", depth: 0.5 },
+
     ],
 },
 

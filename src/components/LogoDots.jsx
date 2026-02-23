@@ -3,36 +3,51 @@ import * as THREE from "three";
 
 export default function LogoDots({ onComplete, loaded }) {
   const mountRef = useRef(null);
+
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+
   const explodedRef = useRef(false);
 
   useEffect(() => {
     const mount = mountRef.current;
+    if (!mount) return;
 
+    // --- THREE BASICS ---
     const scene = new THREE.Scene();
+
     const camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1500
     );
     camera.position.z = 300;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.appendChild(renderer.domElement);
 
+    // --- HOLDERS FOR CLEANUP ---
+    let geometry = null;
+    let material = null;
+    let points = null;
+
+    let animId = null;
+
+    // --- LOGO BUILD ---
     const img = new Image();
     img.src = "/ARBC.png";
 
     img.onload = () => {
       const tempCanvas = document.createElement("canvas");
       const tempCtx = tempCanvas.getContext("2d");
+      if (!tempCtx) return;
 
       const logoWidth = 500;
       const logoHeight = (img.height / img.width) * logoWidth;
+
       tempCanvas.width = logoWidth;
       tempCanvas.height = logoHeight;
       tempCtx.drawImage(img, 0, 0, logoWidth, logoHeight);
@@ -41,7 +56,7 @@ export default function LogoDots({ onComplete, loaded }) {
       const data = imageData.data;
 
       const targets = [];
-      const gap = 3;
+      const gap = 2;
 
       for (let y = 0; y < logoHeight; y += gap) {
         for (let x = 0; x < logoWidth; x += gap) {
@@ -51,7 +66,8 @@ export default function LogoDots({ onComplete, loaded }) {
           const b = data[i + 2];
           const a = data[i + 3];
 
-          if (a > 128 && (r + g + b) < 200) {
+          // dark pixels only
+          if (a > 128 && r + g + b < 200) {
             targets.push({
               x: x - logoWidth / 2,
               y: -(y - logoHeight / 2),
@@ -62,7 +78,8 @@ export default function LogoDots({ onComplete, loaded }) {
       }
 
       const count = targets.length;
-      const geometry = new THREE.BufferGeometry();
+
+      geometry = new THREE.BufferGeometry();
 
       const posArray = new Float32Array(count * 3);
       const targetArray = new Float32Array(count * 3);
@@ -72,25 +89,28 @@ export default function LogoDots({ onComplete, loaded }) {
       const isDark = document.documentElement.classList.contains("dark");
       const colorA = new THREE.Color(isDark ? "#ffffff" : "#5a141f");
       const colorB = new THREE.Color(isDark ? "#6c757d" : "#142954");
-
-
       const tempColor = new THREE.Color();
 
       for (let i = 0; i < count; i++) {
+        // targets
         targetArray[i * 3] = targets[i].x;
         targetArray[i * 3 + 1] = targets[i].y;
         targetArray[i * 3 + 2] = targets[i].z;
 
+        // start scattered
         const angle = Math.random() * Math.PI * 2;
         const radius = 400 + Math.random() * 600;
+
         startArray[i * 3] = Math.cos(angle) * radius;
         startArray[i * 3 + 1] = Math.sin(angle) * radius;
         startArray[i * 3 + 2] = (Math.random() - 0.5) * 500;
 
+        // initial pos = start
         posArray[i * 3] = startArray[i * 3];
         posArray[i * 3 + 1] = startArray[i * 3 + 1];
         posArray[i * 3 + 2] = startArray[i * 3 + 2];
 
+        // color gradient by x
         const t = (targets[i].x + logoWidth / 2) / logoWidth;
         tempColor.lerpColors(colorA, colorB, t);
         colorArray[i * 3] = tempColor.r;
@@ -101,7 +121,7 @@ export default function LogoDots({ onComplete, loaded }) {
       geometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
       geometry.setAttribute("color", new THREE.BufferAttribute(colorArray, 3));
 
-      const material = new THREE.PointsMaterial({
+      material = new THREE.PointsMaterial({
         size: 1.5,
         transparent: true,
         opacity: 0.8,
@@ -109,36 +129,19 @@ export default function LogoDots({ onComplete, loaded }) {
         vertexColors: true,
       });
 
-      const points = new THREE.Points(geometry, material);
+      points = new THREE.Points(geometry, material);
       scene.add(points);
 
-      // === MOUSE ===
-      let mouseX = 0;
-      let mouseY = 0;
-      let mouseWorldX = 0;
-      let mouseWorldY = 0;
-      const mouseVec = new THREE.Vector3();
-      const onMouseMove = (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-        mouseVec.set(mouseX, mouseY, 0.5);
-        mouseVec.unproject(camera);
-        mouseVec.sub(camera.position).normalize();
-        const distance = -camera.position.z / mouseVec.z;
-        mouseWorldX = camera.position.x + mouseVec.x * distance;
-        mouseWorldY = camera.position.y + mouseVec.y * distance;
-      };
-
-      window.addEventListener("mousemove", onMouseMove);
-
-
-      // === ANİMASYON ===
+      // --- ANIMATION ---
       const duration = 3.0;
       const clock = new THREE.Clock();
       let assembled = false;
 
       const animate = () => {
         const elapsed = clock.getElapsedTime();
+
+        if (!geometry) return;
+
         const pos = geometry.attributes.position.array;
 
         if (!explodedRef.current) {
@@ -153,19 +156,33 @@ export default function LogoDots({ onComplete, loaded }) {
             const iz = i * 3 + 2;
 
             if (!assembled) {
-              // Still assembling — interpolate from start to target
-              pos[ix] = startArray[ix] + (targetArray[ix] - startArray[ix]) * eased;
-              pos[iy] = startArray[iy] + (targetArray[iy] - startArray[iy]) * eased;
-              pos[iz] = startArray[iz] + (targetArray[iz] - startArray[iz]) * eased;
+              // assemble
+              pos[ix] =
+                startArray[ix] + (targetArray[ix] - startArray[ix]) * eased;
+              pos[iy] =
+                startArray[iy] + (targetArray[iy] - startArray[iy]) * eased;
+              pos[iz] =
+                startArray[iz] + (targetArray[iz] - startArray[iz]) * eased;
 
+              // small drift near end
               if (eased > 0.9) {
                 const drift = (eased - 0.9) * 10;
                 const ox = targetArray[ix];
                 const oy = targetArray[iy];
                 const oz = targetArray[iz];
-                pos[ix] = pos[ix] + (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) * drift;
-                pos[iy] = pos[iy] + (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) * drift;
-                pos[iz] = pos[iz] + (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) * drift;
+
+                pos[ix] =
+                  pos[ix] +
+                  (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) *
+                    drift;
+                pos[iy] =
+                  pos[iy] +
+                  (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) *
+                    drift;
+                pos[iz] =
+                  pos[iz] +
+                  (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) *
+                    drift;
               }
 
               if (p >= 1 && !assembled) {
@@ -173,80 +190,67 @@ export default function LogoDots({ onComplete, loaded }) {
                 setReady(true);
               }
             } else {
-              // Assembled — magnetic hover only
-              const dx = pos[ix] - mouseWorldX;
-              const dy = pos[iy] - mouseWorldY;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              const hoverRadius = 50;
+              // idle drift when assembled
+              const ox = targetArray[ix];
+              const oy = targetArray[iy];
+              const oz = targetArray[iz];
 
-              if (dist < hoverRadius) {
-                const force = (1 - dist / hoverRadius) * 30;
-                const angle = Math.atan2(dy, dx);
-                pos[ix] += Math.cos(angle) * force;
-                pos[iy] += Math.sin(angle) * force;
-                pos[iz] += (Math.random() - 0.5) * force * 0.3;
-              } else {
-                pos[ix] += (targetArray[ix] - pos[ix]) * 0.08;
-                pos[iy] += (targetArray[iy] - pos[iy]) * 0.08;
-                pos[iz] += (targetArray[iz] - pos[iz]) * 0.08;
-              }
+              pos[ix] +=
+                (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) * 0.05;
+              pos[iy] +=
+                (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) * 0.05;
+              pos[iz] +=
+                (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) * 0.05;
             }
           }
         } else {
-          for (let i = 0; i < count; i++) {
-            const ix = i * 3;
-            const iy = i * 3 + 1;
-            const iz = i * 3 + 2;
-
-            pos[ix] += (pos[ix] - 0) * 0.02;
-            pos[iy] += (pos[iy] - 0) * 0.02;
-            pos[iz] += (Math.random() - 0.5) * 2;
-          }
-
-
-          material.opacity *= 0.98;
-          if (material.opacity < 0.01) {
-            material.opacity = 0;
-          }
+          // exploded: optional render still, or you can disperse here
+          // (currently just keeps last positions)
         }
 
-
         geometry.attributes.position.needsUpdate = true;
-
-        camera.position.x += (mouseX * 30 - camera.position.x) * 0.05;
-        camera.position.y += (mouseY * 30 - camera.position.y) * 0.05;
         camera.lookAt(scene.position);
 
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
+        animId = requestAnimationFrame(animate);
       };
 
       animate();
+    };
 
+    // --- RESIZE ---
+    const onResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener("resize", onResize);
 
-      const onResize = () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      };
-      window.addEventListener("resize", onResize);
+    // --- CLEANUP ---
+    return () => {
+      window.removeEventListener("resize", onResize);
 
-      return () => {
-        window.removeEventListener("mousemove", onMouseMove);
-        window.removeEventListener("resize", onResize);
+      if (animId) cancelAnimationFrame(animId);
+
+      if (points) scene.remove(points);
+
+      if (geometry) geometry.dispose();
+      if (material) material.dispose();
+
+      renderer.dispose();
+
+      if (renderer.domElement && mount.contains(renderer.domElement)) {
         mount.removeChild(renderer.domElement);
-        geometry.dispose();
-        material.dispose();
-        renderer.dispose();
-      };
+      }
     };
   }, []);
 
   const handleClick = () => {
     if (!ready || loaded) return;
     explodedRef.current = true;
+
     setTimeout(() => {
-      onComplete();
+      onComplete?.();
     }, 800);
   };
 
@@ -254,17 +258,24 @@ export default function LogoDots({ onComplete, loaded }) {
     <div
       ref={mountRef}
       onClick={handleClick}
-      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${loaded ? "opacity-0 pointer-events-none" : ""
-        }`}
+      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${
+        loaded ? "opacity-0 pointer-events-none" : ""
+      }`}
     >
       {!ready && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50 text-sm font-light tracking-widest">
+        <div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-sm font-light tracking-widest"
+          style={{ color: "var(--color-text-muted)" }}
+        >
           {progress}%
         </div>
       )}
 
       {ready && !loaded && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white text-sm font-normal tracking-widest animate-pulse">
+        <div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-sm font-normal tracking-widest animate-pulse"
+          style={{ color: "var(--color-text)" }}
+        >
           CLICK TO ENTER
         </div>
       )}

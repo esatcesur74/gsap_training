@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import { galleryPages, photoMeta } from "../../data/galleryData";
+import imgC from "../../assets/c.jpeg";
+
 
 const photos = galleryPages[5].photos;
 
@@ -74,7 +76,13 @@ export default function MouseImageGallery() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       className="h-screen w-screen relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${imgC})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
+
       {photos.map((photo, index) => {
         const meta = photoMeta[photo.photoId];
         if (!meta) return null;

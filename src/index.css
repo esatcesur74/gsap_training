@@ -6,6 +6,7 @@
     --color-text-muted: #666666;
     --color-accent: #d97706;
     --color-surface: #ffffff;
+    --logo-filter: brightness(0);
 }
 
 .dark {
@@ -14,6 +15,7 @@
     --color-text-muted: rgba(255, 255, 255, 0.5);
     --color-accent: #fbbf24;
     --color-surface: #111111;
+    --logo-filter: brightness(0) invert(1);
 }
 
 @font-face {
@@ -50,7 +52,7 @@ body {
   animation-name: row-left;
 }
 
-/* YOUR STYLE (unchanged) */
+
 .infinite-text-row {
   display: flex;
   white-space: nowrap;
@@ -62,7 +64,6 @@ body {
   color: var(--color-text);
 }
 
-/* seamless loop: 2 identical blocks, move by half */
 @keyframes row-right {
   from { transform: translate3d(-50%,0,0); }
   to   { transform: translate3d(0,0,0); }
@@ -70,4 +71,16 @@ body {
 @keyframes row-left {
   from { transform: translate3d(0,0,0); }
   to   { transform: translate3d(-50%,0,0); }
+}
+
+
+nav:hover a {
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+
+nav:hover a:hover {
+  opacity: 1;
+  filter: blur(0px);
 }

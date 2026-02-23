@@ -34,7 +34,6 @@ export default function DepthPhoto({ photo, mouseRef }) {
   console.log("META:", meta);
 
   if (!meta) {
-    console.log("❌ NO META FOUND");
     return null;
   }
 
@@ -43,9 +42,7 @@ export default function DepthPhoto({ photo, mouseRef }) {
       ? meta.src
       : meta.src?.default ?? meta.src;
 
-  console.log("SRC:", src);
-
-  const isVideo = photo.photoId === "vid1" || /\.mp4(\?|#|$)/i.test(String(src));
+  const isVideo = photo.photoId === "vid3" || /\.mp4(\?|#|$)/i.test(String(src));
 
   console.log("IS VIDEO:", isVideo);
 
@@ -65,7 +62,6 @@ export default function DepthPhoto({ photo, mouseRef }) {
     >
       {isVideo ? (
         <>
-          {console.log("🎬 RENDERING VIDEO")}
           <video
             src={src}
             autoPlay
@@ -77,7 +73,7 @@ export default function DepthPhoto({ photo, mouseRef }) {
               width: "100%",
               height: "auto",
               display: "block",
-              background: "red", // görünmezse bile alanı gör
+              background: "red", 
             }}
             onError={(e) => console.log("VIDEO ERROR:", e)}
             onLoadedData={() => console.log("VIDEO LOADED")}

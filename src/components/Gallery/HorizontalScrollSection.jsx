@@ -24,7 +24,7 @@ export default function HorizontalScrollSection() {
         x: () => -(section.scrollWidth - window.innerWidth),
         ease: "none",
         scrollTrigger: {
-          trigger: trigger,
+          trigger,
           start: "top top",
           end: () => `+=${section.scrollWidth - window.innerWidth}`,
           pin: true,
@@ -38,6 +38,27 @@ export default function HorizontalScrollSection() {
     return () => ctx.revert();
   }, []);
 
+  const renderPhoto = (photo) => {
+    const meta = photoMeta[photo.photoId];
+    if (!meta) return null;
+
+    const offsetX = photo.offsetX ?? "0px"; // galleryData'dan
+    const offsetY = photo.offsetY ?? "0px";
+
+    return (
+      <div
+        key={photo.photoId}
+        className="flex-shrink-0"
+        style={{
+          width: photo.width,
+          transform: `translate(${offsetX}, ${offsetY})`,
+        }}
+      >
+        <PhotoCard src={meta.src} data={meta} photoId={photo.photoId} />
+      </div>
+    );
+  };
+
   return (
     <section ref={triggerRef} className="overflow-hidden">
       <div
@@ -45,15 +66,7 @@ export default function HorizontalScrollSection() {
         className="flex h-screen items-center gap-[2vw] px-[2vw]"
         style={{ width: "fit-content" }}
       >
-        {firstFour.map((photo) => {
-          const meta = photoMeta[photo.photoId];
-          if (!meta) return null;
-          return (
-            <div key={photo.photoId} className="flex-shrink-0" style={{ width: photo.width }}>
-              <PhotoCard src={meta.src} data={meta} photoId={photo.photoId} />
-            </div>
-          );
-        })}
+        {firstFour.map(renderPhoto)}
 
         <div className="flex-shrink-0 h-screen w-screen flex flex-col items-center justify-center gap-[2vh]">
           {[...Array(6)].map((_, i) => (
@@ -64,20 +77,10 @@ export default function HorizontalScrollSection() {
               className="w-[40vw] h-auto"
               style={{ filter: "var(--logo-filter)" }}
             />
-
           ))}
         </div>
 
-
-        {lastTwo.map((photo) => {
-          const meta = photoMeta[photo.photoId];
-          if (!meta) return null;
-          return (
-            <div key={photo.photoId} className="flex-shrink-0" style={{ width: photo.width }}>
-              <PhotoCard src={meta.src} data={meta} photoId={photo.photoId} />
-            </div>
-          );
-        })}
+        {lastTwo.map(renderPhoto)}
       </div>
     </section>
   );

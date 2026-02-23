@@ -19,12 +19,12 @@ import imgU from "../assets/u.jpeg";
 import imgV from "../assets/v.jpeg";
 import imgX from "../assets/x.jpeg";
 import imgZ from "../assets/z.jpeg";
-import imgOE from "../assets/ø.jpeg";
+import imgABC from "../assets/abc.jpeg";
 import imgAA from "../assets/aa.jpeg";
 import imgAB from "../assets/ab.jpeg";
 import imgAC from "../assets/ac.jpeg";
 import imgAD from "../assets/ad.jpeg";
-import vid1 from "../assets/vid1.mp4"
+import vid1 from "../assets/vid1.mp4";
 
 
 export const photoMeta = {
@@ -49,7 +49,7 @@ export const photoMeta = {
     v: { src: imgV, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     x: { src: imgX, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     z: { src: imgZ, date: "16 january 2026", shotBy: "Life Jumanson", location: "Oslo", coords: null, model: "Sara Kahsai", campaign: "Comme des Immigres", faceRegion: { cx: 43, cy: 54, rx: 3, ry: 3 } },
-    oe: { src: imgOE, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
+    abc: { src: imgABC, date: "8 January 2026", shotBy: "Akfi Akgun", location: "Tøyen / Oslo", coords: null, model: "Ali Ezzawi, Dilean Da Silva, Lamin Kanyi", campaign: "Ekip Hoologan sweatshirt", faceRegions:[{ cx: 34.3, cy: 25, rx: 2, ry: 5 }, { cx: 57, cy: 32, rx: 1, ry: 3},{ cx: 73, cy: 46, rx: 2, ry: 3 }]   },
     aa: { src: imgAA, date: "24 january 2026", shotBy: "Siar Esat Cesur", location: "Bjørvika / Oslo", coords: "59.907938, 10.761582", model: "Bashir Mohammed", campaign: "Ekip Pop-Up", faceRegion: { cx: 63, cy: 57, rx: 8, ry: 4, angle: -12 } },
     ab: { src: imgAB, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
     ac: { src: imgAC, date: null, shotBy: null, location: null, coords: null, model: null, campaign: null },
@@ -77,9 +77,7 @@ export const galleryPages = [
         { photoId: "s", position: { top: "18%", left: "3%" }, width: "22vw", depth: 0.3 },
         { photoId: "z", position: { top: "25%", left: "75%" }, width: "23vw", depth: 0.4 },
         { photoId: "aa", position: { top: "18%", left: "50%" }, width: "22vw", depth: 0.9 },
-        { photoId: "b", position: { top: "0%", left: "0%" }, width: "25vw", depth: 0.5 },
-        { photoId: "vid1", position: { top: "0%", left: "0%" }, width: "40vw", depth: 0.5 },
-
+        { photoId: "abc", position: { top: "32%", left: "30%" }, width: "45vw", depth: 0.5, zIndex:100, offsetX: "-16vw" },
     ],
 },
 

@@ -5,6 +5,7 @@ export default function LogoDots({ onComplete, loaded }) {
   const mountRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
+  const prevProgressRef = useRef(0);
   const [ready, setReady] = useState(false);
 
   const explodedRef = useRef(false);
@@ -13,7 +14,7 @@ export default function LogoDots({ onComplete, loaded }) {
     const mount = mountRef.current;
     if (!mount) return;
 
-    // --- THREE BASICS ---
+
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(
@@ -29,7 +30,7 @@ export default function LogoDots({ onComplete, loaded }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     mount.appendChild(renderer.domElement);
 
-    // --- HOLDERS FOR CLEANUP ---
+
     let geometry = null;
     let material = null;
     let points = null;
@@ -66,7 +67,7 @@ export default function LogoDots({ onComplete, loaded }) {
           const b = data[i + 2];
           const a = data[i + 3];
 
-          // dark pixels only
+
           if (a > 128 && r + g + b < 200) {
             targets.push({
               x: x - logoWidth / 2,
@@ -85,6 +86,8 @@ export default function LogoDots({ onComplete, loaded }) {
       const targetArray = new Float32Array(count * 3);
       const startArray = new Float32Array(count * 3);
       const colorArray = new Float32Array(count * 3);
+      const velocityArray = new Float32Array(count * 3);
+
 
       const isDark = document.documentElement.classList.contains("dark");
       const colorA = new THREE.Color(isDark ? "#ffffff" : "#5a141f");
@@ -92,12 +95,12 @@ export default function LogoDots({ onComplete, loaded }) {
       const tempColor = new THREE.Color();
 
       for (let i = 0; i < count; i++) {
-        // targets
+
         targetArray[i * 3] = targets[i].x;
         targetArray[i * 3 + 1] = targets[i].y;
         targetArray[i * 3 + 2] = targets[i].z;
 
-        // start scattered
+
         const angle = Math.random() * Math.PI * 2;
         const radius = 400 + Math.random() * 600;
 
@@ -105,17 +108,30 @@ export default function LogoDots({ onComplete, loaded }) {
         startArray[i * 3 + 1] = Math.sin(angle) * radius;
         startArray[i * 3 + 2] = (Math.random() - 0.5) * 500;
 
-        // initial pos = start
+
         posArray[i * 3] = startArray[i * 3];
         posArray[i * 3 + 1] = startArray[i * 3 + 1];
         posArray[i * 3 + 2] = startArray[i * 3 + 2];
 
-        // color gradient by x
+
         const t = (targets[i].x + logoWidth / 2) / logoWidth;
         tempColor.lerpColors(colorA, colorB, t);
         colorArray[i * 3] = tempColor.r;
         colorArray[i * 3 + 1] = tempColor.g;
         colorArray[i * 3 + 2] = tempColor.b;
+
+
+        const tx = targetArray[i * 3];
+        const ty = targetArray[i * 3 + 1];
+        const tz = targetArray[i * 3 + 2];
+        const len = Math.sqrt(tx * tx + ty * ty + tz * tz) || 1;
+        const speed = 2 + Math.random() * 4;
+        velocityArray[i * 3] = (tx / len) * speed;
+        velocityArray[i * 3 + 1] = (ty / len) * speed;
+        velocityArray[i * 3 + 2] = (tz / len) * speed;
+
+
+
       }
 
       geometry.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
@@ -132,7 +148,7 @@ export default function LogoDots({ onComplete, loaded }) {
       points = new THREE.Points(geometry, material);
       scene.add(points);
 
-      // --- ANIMATION ---
+
       const duration = 3.0;
       const clock = new THREE.Clock();
       let assembled = false;
@@ -148,7 +164,14 @@ export default function LogoDots({ onComplete, loaded }) {
           const p = Math.min(elapsed / duration, 1.0);
           const eased = 1 - Math.pow(1 - p, 3);
 
-          setProgress(Math.floor(eased * 100));
+          const newProg = Math.floor(eased * 100);
+          if (newProg !== prevProgressRef.current) {
+            prevProgressRef.current = newProg;
+            setProgress(newProg);
+          }
+
+
+
 
           for (let i = 0; i < count; i++) {
             const ix = i * 3;
@@ -156,7 +179,7 @@ export default function LogoDots({ onComplete, loaded }) {
             const iz = i * 3 + 2;
 
             if (!assembled) {
-              // assemble
+
               pos[ix] =
                 startArray[ix] + (targetArray[ix] - startArray[ix]) * eased;
               pos[iy] =
@@ -164,7 +187,7 @@ export default function LogoDots({ onComplete, loaded }) {
               pos[iz] =
                 startArray[iz] + (targetArray[iz] - startArray[iz]) * eased;
 
-              // small drift near end
+
               if (eased > 0.9) {
                 const drift = (eased - 0.9) * 10;
                 const ox = targetArray[ix];
@@ -174,15 +197,15 @@ export default function LogoDots({ onComplete, loaded }) {
                 pos[ix] =
                   pos[ix] +
                   (ox + Math.sin(elapsed * 0.3 + ox * 0.01) * 2 - pos[ix]) *
-                    drift;
+                  drift;
                 pos[iy] =
                   pos[iy] +
                   (oy + Math.cos(elapsed * 0.3 + oy * 0.01) * 2 - pos[iy]) *
-                    drift;
+                  drift;
                 pos[iz] =
                   pos[iz] +
                   (oz + Math.sin(elapsed * 0.5 + oz * 0.05) * 3 - pos[iz]) *
-                    drift;
+                  drift;
               }
 
               if (p >= 1 && !assembled) {
@@ -190,7 +213,7 @@ export default function LogoDots({ onComplete, loaded }) {
                 setReady(true);
               }
             } else {
-              // idle drift when assembled
+
               const ox = targetArray[ix];
               const oy = targetArray[iy];
               const oz = targetArray[iz];
@@ -204,8 +227,21 @@ export default function LogoDots({ onComplete, loaded }) {
             }
           }
         } else {
-          // exploded: optional render still, or you can disperse here
-          // (currently just keeps last positions)
+          for (let i = 0; i < count; i++) {
+            const ix = i * 3;
+            const iy = i * 3 + 1;
+            const iz = i * 3 + 2;
+
+            pos[ix] += velocityArray[ix];
+            pos[iy] += velocityArray[iy];
+            pos[iz] += velocityArray[iz];
+          }
+
+          
+          if (material.opacity > 0) {
+            material.opacity -= 0.016;
+          }
+
         }
 
         geometry.attributes.position.needsUpdate = true;
@@ -218,7 +254,7 @@ export default function LogoDots({ onComplete, loaded }) {
       animate();
     };
 
-    // --- RESIZE ---
+
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -226,7 +262,7 @@ export default function LogoDots({ onComplete, loaded }) {
     };
     window.addEventListener("resize", onResize);
 
-    // --- CLEANUP ---
+
     return () => {
       window.removeEventListener("resize", onResize);
 
@@ -258,9 +294,8 @@ export default function LogoDots({ onComplete, loaded }) {
     <div
       ref={mountRef}
       onClick={handleClick}
-      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${
-        loaded ? "opacity-0 pointer-events-none" : ""
-      }`}
+      className={`fixed inset-0 w-full h-full z-50 cursor-pointer transition-opacity duration-700 ${loaded ? "opacity-0 pointer-events-none" : ""
+        }`}
     >
       {!ready && (
         <div

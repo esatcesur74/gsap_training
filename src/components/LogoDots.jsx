@@ -37,9 +37,8 @@ export default function LogoDots({ onComplete, loaded }) {
 
     let animId = null;
 
-    // --- LOGO BUILD ---
     const img = new Image();
-    img.src = "/ARBC.png";
+    img.src = import.meta.env.BASE_URL + "ARBC.png";
 
     img.onload = () => {
       const tempCanvas = document.createElement("canvas");
@@ -237,7 +236,7 @@ export default function LogoDots({ onComplete, loaded }) {
             pos[iz] += velocityArray[iz];
           }
 
-          
+
           if (material.opacity > 0) {
             material.opacity -= 0.016;
           }

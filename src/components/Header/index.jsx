@@ -18,7 +18,7 @@ export default function Header() {
       >
 
         <img
-          src="/ARBC.svg"
+          src={`${import.meta.env.BASE_URL}ARBC.svg`}
           alt="Logo"
           className="h-6"
           style={{ filter: "var(--logo-filter)" }}

@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { blur, translate, opacity } from "./anim";
-import ad from "../../assets/ad.jpeg";
+import imgAD from "../../assets/ad.jpeg";
+import imgZ from "../../assets/z.jpeg";
+import imgAA from "../../assets/aa.jpeg";
+import imgS from "../../assets/s.jpeg";
 
 const links = [
-
-  { title: "Gallery", href: "#gallery", src: ad },
-  { title: "Shop", href: "#about", src: "/images/nav-about.jpg" },
-  { title: "Lookbook", href: "#lookbook", src: "/images/nav-lookbook.jpg" },
-  { title: "Contact", href: "#contact", src: "/images/nav-contact.jpg" },
+  { title: "Gallery", href: "#gallery", src: imgAD },
+  { title: "Shop", href: "#about", src: imgZ },
+  { title: "Lookbook", href: "#lookbook", src: imgAA },
+  { title: "Contact", href: "#contact", src: imgS },
 ];
 
 
@@ -61,9 +63,9 @@ export default function Nav({ closeMenu }) {
       style={{ backgroundColor: "var(--color-bg)" }}
       className="w-full px-8 pb-12"
     >
-      <div className="flex justify-between items-start">
-       
-        <div className="flex flex-wrap max-w-[60%] mt-10">
+      <div className="flex justify-between gap-12">
+
+        <div className="flex flex-wrap mt-10">
           {links.map((link, i) => (
             <NavLink
               key={i}
@@ -75,12 +77,14 @@ export default function Nav({ closeMenu }) {
           ))}
         </div>
 
-        
-        <div className="relative w-[400px] h-[300px] mt-10 overflow-hidden">
+        <div
+          className="relative mt-10 shrink-0 overflow-hidden"
+          style={{ width: "30vw", height: "45vh" }}
+        >
           <img
             src={links[selectedLink.index].src}
             alt=""
-            className="w-full h-full object-cover transition-all duration-300"
+            className="w-full h-full object-cover transition-all duration-500"
             style={{
               opacity: selectedLink.isActive ? 1 : 0,
               transform: selectedLink.isActive ? "scale(1)" : "scale(0.95)",
@@ -89,7 +93,6 @@ export default function Nav({ closeMenu }) {
         </div>
       </div>
 
-      
       <motion.div
         variants={opacity}
         initial="initial"
@@ -105,4 +108,3 @@ export default function Nav({ closeMenu }) {
     </div>
   );
 }
-

@@ -104,15 +104,12 @@ export const galleryPages = [
         id: 6,
         photos: [
             { photoId: "ac", position: { top: "8%", left: "50%" }, width: "26vw", depth: 0.7 },
-            { photoId: "ad", position: { top: "20%", left: "5%" }, width: "24vw", depth: 0.5 },
-            { photoId: "f", position: { top: "8%", left: "55%" }, width: "25vw", depth: 0.8 },
             { photoId: "x", position: { top: "5%", left: "10%" }, width: "25vw", depth: 0.8 },
             { photoId: "k", position: { top: "52%", left: "72%" }, width: "22vw", depth: 0.5 },
             { photoId: "oe", position: { top: "40%", left: "35%" }, width: "28vw", depth: 0.6 },
             { photoId: "aa", position: { top: "62%", left: "65%" }, width: "22vw", depth: 0.9 },
             { photoId: "ab", position: { top: "68%", left: "5%" }, width: "24vw", depth: 0.3 },
             { photoId: "r", position: { top: "8%", left: "45%" }, width: "27vw", depth: 0.7 },
-
             { photoId: "t", position: { top: "45%", left: "60%" }, width: "24vw", depth: 0.9 },
             { photoId: "u", position: { top: "55%", left: "10%" }, width: "26vw", depth: 0.5 },
             { photoId: "v", position: { top: "72%", left: "50%" }, width: "21vw", depth: 0.2 },

@@ -20,15 +20,24 @@
 
 @font-face {
     font-family: "Inter Variable";
-    src: url("/fonts/InterVariable-Italic.ttf") format("truetype");
+    src: url("./assets/InterVariable-Italic.ttf") format("truetype");
     font-style: italic;
     font-weight: 100 900;
     font-display: swap;
 }
 
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
 body {
     width: 100dvw;
-    overflow: hidden;
+    overflow-x: hidden;
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: "Inter Variable", sans-serif;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import PhotoCard from "../PhotoCard";
 import { photoMeta } from "../../data/galleryData";
@@ -8,11 +8,10 @@ const MAX_PARALLAX_Y = 30;
 
 export default function DepthPhoto({ photo, mouseRef }) {
   const elRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
-    let animId;
-
-    const animate = () => {
+    const onTick = () => {
       if (elRef.current && mouseRef.current) {
         const { x, y } = mouseRef.current;
         gsap.set(elRef.current, {
@@ -20,18 +19,13 @@ export default function DepthPhoto({ photo, mouseRef }) {
           y: y * photo.depth * MAX_PARALLAX_Y,
         });
       }
-      animId = requestAnimationFrame(animate);
     };
 
-    animId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animId);
+    gsap.ticker.add(onTick);
+    return () => gsap.ticker.remove(onTick);
   }, [photo.depth, mouseRef]);
 
   const meta = photoMeta[photo.photoId];
-
-  console.log("----");
-  console.log("PHOTO ID:", photo.photoId);
-  console.log("META:", meta);
 
   if (!meta) {
     return null;
@@ -42,16 +36,27 @@ export default function DepthPhoto({ photo, mouseRef }) {
       ? meta.src
       : meta.src?.default ?? meta.src;
 
-  const isVideo = photo.photoId === "vid3" || /\.mp4(\?|#|$)/i.test(String(src));
-
-  console.log("IS VIDEO:", isVideo);
+  const isVideo = photo.photoId.startsWith("vid") || /\.mp4(\?|#|$)/i.test(String(src));
 
   const scale = 0.85 + photo.depth * 0.2;
+
+  const handleMouseEnter = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, []);
 
   return (
     <div
       ref={elRef}
-      className="absolute"
+      className="absolute will-change-transform"
       style={{
         top: photo.position.top,
         left: photo.position.left,
@@ -61,29 +66,24 @@ export default function DepthPhoto({ photo, mouseRef }) {
       }}
     >
       {isVideo ? (
-        <>
-          <video
-            src={src}
-            autoPlay
-            muted
-            loop
-            playsInline
-            controls
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              background: "red", 
-            }}
-            onError={(e) => console.log("VIDEO ERROR:", e)}
-            onLoadedData={() => console.log("VIDEO LOADED")}
-          />
-        </>
+        <video
+          ref={videoRef}
+          src={src}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            width: "100%",
+            height: "auto",
+            display: "block",
+            cursor: "pointer",
+          }}
+        />
       ) : (
-        <>
-          {console.log("🖼 RENDERING IMAGE")}
-          <PhotoCard src={src} data={meta} photoId={photo.photoId} />
-        </>
+        <PhotoCard src={src} data={meta} photoId={photo.photoId} />
       )}
     </div>
   );

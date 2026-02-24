@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { useScroll, useTransform, motion, useMotionValueEvent } from "framer-motion";
 import DepthPhoto from "./DepthPhoto";
 import InfiniteTextScroll from "./InfiniteTextScroll";
 
@@ -8,6 +8,12 @@ export default function GalleryPage({ page, pageIndex, mouseRef }) {
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    if (Math.round(v * 100) % 10 === 0) {
+      console.log(`[GALLERY page${pageIndex}] scrollYProgress: ${v.toFixed(3)}`);
+    }
   });
 
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);

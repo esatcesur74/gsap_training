@@ -15,31 +15,22 @@ export default function SmoothScroll({ children }) {
       touchMultiplier: 1.2,
     });
 
-    // RAF
-    const raf = (time) => {
-      lenis.raf(time);
-      ScrollTrigger.update(); // keep GSAP in sync
-      requestAnimationFrame(raf);
+    lenis.on("scroll", ScrollTrigger.update);
+
+    const tickerCallback = (time) => {
+      lenis.raf(time * 1000);
     };
-    requestAnimationFrame(raf);
+    gsap.ticker.add(tickerCallback);
+    gsap.ticker.lagSmoothing(0);
 
-    // ScrollTrigger <-> Lenis bridge
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (arguments.length) lenis.scrollTo(value, { immediate: true });
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
-      },
-      fixedMarkers: true,
-    });
-
-    ScrollTrigger.addEventListener("refresh", () => lenis.resize());
-    ScrollTrigger.refresh();
+    // DEBUG: log Lenis scroll position every 500ms
+    let debugInterval = setInterval(() => {
+      console.log("[LENIS] scroll:", Math.round(lenis.scroll), "limit:", Math.round(lenis.limit), "isScrolling:", lenis.isScrolling);
+    }, 500);
 
     return () => {
-      ScrollTrigger.removeEventListener("refresh", () => lenis.resize());
+      clearInterval(debugInterval);
+      gsap.ticker.remove(tickerCallback);
       lenis.destroy();
     };
   }, []);

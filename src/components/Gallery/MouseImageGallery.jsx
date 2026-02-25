@@ -3,10 +3,11 @@ import { galleryPages, photoMeta } from "../../data/galleryData";
 import imgC from "../../assets/c.jpeg";
 
 
-const photos = galleryPages[5].photos;
+const photos = galleryPages[5].photos.filter((p) => photoMeta[p.photoId]);
 
 export default function MouseImageGallery() {
   const containerRef = useRef(null);
+
   const imageRefs = useRef([]);
   const currentIndex = useRef(0);
   const steps = useRef(0);
@@ -80,6 +81,9 @@ export default function MouseImageGallery() {
         backgroundImage: `url(${imgC})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+
+        position: "relative",
+        zIndex: 20,
       }}
     >
 

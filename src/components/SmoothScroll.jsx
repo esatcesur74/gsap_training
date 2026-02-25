@@ -23,13 +23,19 @@ export default function SmoothScroll({ children }) {
     gsap.ticker.add(tickerCallback);
     gsap.ticker.lagSmoothing(0);
 
-    // DEBUG: log Lenis scroll position every 500ms
-    let debugInterval = setInterval(() => {
-      console.log("[LENIS] scroll:", Math.round(lenis.scroll), "limit:", Math.round(lenis.limit), "isScrolling:", lenis.isScrolling);
-    }, 500);
+    // Lenis limit'i ScrollTrigger pin spacer'lari sonrasi guncelle
+    const onRefresh = () => {
+      lenis.resize();
+    };
+    ScrollTrigger.addEventListener("refresh", onRefresh);
+
+    // Pin spacer DOM'a eklendikten sonra refresh yap
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
 
     return () => {
-      clearInterval(debugInterval);
+      ScrollTrigger.removeEventListener("refresh", onRefresh);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
     };

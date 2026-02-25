@@ -19,10 +19,6 @@ export default function HorizontalScrollSection() {
     const trigger = triggerRef.current;
     if (!section || !trigger) return;
 
-    const scrollDist = section.scrollWidth - window.innerWidth;
-    console.log("[HORIZONTAL] scrollWidth:", section.scrollWidth, "windowWidth:", window.innerWidth, "scrollDist:", scrollDist);
-    console.log("[HORIZONTAL] trigger offsetTop:", trigger.offsetTop, "trigger height:", trigger.offsetHeight);
-
     const ctx = gsap.context(() => {
       gsap.to(section, {
         x: () => -(section.scrollWidth - window.innerWidth),
@@ -35,13 +31,6 @@ export default function HorizontalScrollSection() {
           scrub: 0.6,
           invalidateOnRefresh: true,
           anticipatePin: 1,
-          onUpdate: (self) => {
-            console.log("[HORIZONTAL] progress:", self.progress.toFixed(3), "direction:", self.direction);
-          },
-          onEnter: () => console.log("[HORIZONTAL] >>> ENTER (pin started)"),
-          onLeave: () => console.log("[HORIZONTAL] >>> LEAVE (pin ended)"),
-          onEnterBack: () => console.log("[HORIZONTAL] >>> ENTER BACK"),
-          onLeaveBack: () => console.log("[HORIZONTAL] >>> LEAVE BACK"),
         },
       });
     });

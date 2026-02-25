@@ -35,6 +35,14 @@ html.lenis body {
     scroll-behavior: auto !important;
 }
 
+html {
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     width: 100dvw;
     overflow-x: hidden;

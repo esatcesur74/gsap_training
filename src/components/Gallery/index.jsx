@@ -15,6 +15,14 @@ export default function Gallery() {
   const mouseRef = useRef({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
+  // Gallery mount olduktan sonra Lenis limit'i guncelle
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh(true);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     let targetX = 0;
     let targetY = 0;

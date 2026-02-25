@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <ThemeProvider>
-      <div className="relative min-h-screen overflow-hidden" style={{ backgroundColor: "var(--color-bg)" }}>
+      <div className="relative min-h-screen overflow-x-hidden" style={{ backgroundColor: "var(--color-bg)" }}>
         <LogoDots onComplete={() => setLoaded(true)} loaded={loaded} />
         {loaded && (
           <div className="relative z-10">

@@ -84,7 +84,7 @@ export default function Nav({ closeMenu }) {
           <img
             src={links[selectedLink.index].src}
             alt=""
-            className="w-full h-full object-cover transition-all duration-500"
+            className="w-full h-full object-contain transition-all duration-500"
             style={{
               opacity: selectedLink.isActive ? 1 : 0,
               transform: selectedLink.isActive ? "scale(1)" : "scale(0.95)",
